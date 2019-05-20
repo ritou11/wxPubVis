@@ -7,4 +7,4 @@
 3. lint: `yarn lint`
 
 ## License
-MIT.
+MIT

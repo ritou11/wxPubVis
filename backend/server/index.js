@@ -33,6 +33,7 @@ const app = express();
 
 app.set('trust proxy', true);
 app.use('/api', api, (req, res) => res.status(404).send());
+// app.use('/', (req, res) => res.status(200).send("ok"), (req, res) => res.status(404).send());
 
 // get the intended host and port number, use localhost and port 3000 if not provided
 const customHost = argv.host || process.env.HOST;

@@ -15,14 +15,31 @@ services:
       - 8101:8101
       - 8102:8102
       - 8104:8104
-    links:
-      - redis
-      - mongo
+    networks:
+      - main
+  bWechat:
+    build: ./server/
+    image: server:latest
+    expose:
+      - "3000"
+    ports:
+      - "80:3000"
+    environment:
+      - MONGO_HOST=mongo
+    networks:
+      - main
   redis:
     image: redis:alpine
+    networks:
+      - main
   mongo:
     image: mongo:3.6
     volumes:
       - mongodata:/data/db
+    networks:
+      - main
 volumes:
   mongodata:
+networks:
+  main:
+    driver: bridge

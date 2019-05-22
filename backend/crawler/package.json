@@ -1,5 +1,5 @@
 {
-  "name": "wechat_spider",
+  "name": "wxPubAnal/backend/crawler",
   "version": "1.1.1",
   "description": "wechat spider by Man-in-the-middle attack",
   "main": "index.js",
@@ -10,7 +10,6 @@
     "mp": "DEBUG=ws:mp* node second/task.js",
     "test": "mocha --recursive --exit --timeout 10000"
   },
-  "author": "liqiang",
   "license": "MIT",
   "dependencies": {
     "anyproxy": "^4.0.5",
@@ -32,9 +31,5 @@
   "devDependencies": {
     "mocha": "^5.2.0",
     "nodemon": "^1.11.0"
-  },
-  "keywords": [
-    "wechat",
-    "spider"
-  ]
+  }
 }

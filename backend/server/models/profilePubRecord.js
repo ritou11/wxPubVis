@@ -1,4 +1,5 @@
-const { Schema } = require('mongoose');
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 // 公众号的发布文章记录
 const ProfilePubRecordSchema = new Schema({

@@ -1,4 +1,5 @@
-const { Schema } = require('mongoose');
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 // 数据结构：公众号账号
 const ProfileSchema = new Schema({

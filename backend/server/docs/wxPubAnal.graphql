@@ -1,0 +1,103 @@
+# Entry points
+
+type Query {
+  status: Status
+  list(input: ListInput!): [Item!]
+  item(input: ItemInput!): Item
+  myTickets(input: MyTicketsInput!): Int
+  majors: [Major!]
+  ballot(input: BallotInput!): Ballot
+}
+
+type Mutation {
+  vote(input: VoteInput!): String
+  openSession(input: SessionInput!): SessionRes
+}
+
+# Inputs
+
+input ListInput {
+  bId: ID!
+  token: Token
+  skip: Int!
+  count: Int!
+  search: SearchContent
+}
+
+input SearchContent {
+  major: String
+  iId: Int
+  author: String
+}
+
+input MyTicketsInput {
+  bId: ID!
+  token: Token!
+}
+
+input ItemInput {
+  bId: ID!
+  iId: Int!
+  token: Token
+}
+
+input BallotInput {
+  bId: ID!
+}
+
+input VoteInput {
+  bId: ID!
+  iId: Int!
+  token: Token!
+}
+
+input SessionInput {
+  code: String!
+}
+
+input Token {
+  code: String
+  openId: String
+}
+# Objects
+
+type Status {
+  version: String
+  commitHash: String
+}
+
+type Ballot {
+  icon: String
+  title: String
+  maxTickets: Int!
+}
+
+type Item {
+  bId: ID!
+  iId: Int!
+  image: String
+  title: String
+  intro: String
+  brief: String
+  author: [Author!]
+  tickets: Int
+  isVoted: Boolean!
+}
+
+type Author {
+  aId: ID!
+  name: String
+  major: Major
+  number: String
+}
+
+type Major {
+  mId: ID!
+  name: String
+  alias: [String!]
+}
+
+type SessionRes {
+  errMsg: String
+  openId: String
+}

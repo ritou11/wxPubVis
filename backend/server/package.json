@@ -1,5 +1,5 @@
 {
-  "name": "wxPubAnal/backend/server",
+  "name": "wxPubAnal-backend-server",
   "version": "1.0.0",
   "description": "Server of wxPubAnal backend",
   "repository": "https://github.com/ritou11/wxPubAnal/tree/master/backend",
@@ -30,6 +30,7 @@
     "lodash": "4.17.5",
     "minimist": "1.2.0",
     "mongoose": "5.0.11",
+    "motime": "^0.0.2",
     "nocache": "2.0.0",
     "ratelimiter": "3.0.3",
     "winston": "3.0.0-rc1"

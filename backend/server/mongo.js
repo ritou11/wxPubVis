@@ -52,30 +52,11 @@ const connect = async () => {
   }
   isConnected = true;
 
-  const dbName = process.env.MONGO_DBNAME || 'cpts';
+  const dbName = process.env.MONGO_DBNAME || 'wechat_spider';
   logger.debug('Mongo dbname', dbName);
   await connectLocal(dbName);
 };
 
-const fixUpdate = (schema) => {
-  logger.info('Injecting hook for schema');
-
-  // eslint-disable-next-line func-names
-  schema.pre('findOneAndUpdate', function (next) {
-    logger.trace('Fix query');
-    if (this.options.upsert) {
-      logger.trace('Removing $setOnInsert.__v');
-      delete this._update.$setOnInsert.__v;
-    }
-    if (!_.get(this._update, '$inc.__v')) {
-      logger.trace('Adding $inv.__v');
-      _.set(this._update, '$inc.__v', 1);
-    }
-    next();
-  });
-};
-
 module.exports = {
   connect,
-  fixUpdate,
 };

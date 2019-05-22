@@ -1,5 +1,5 @@
 {
-  "name": "wxPubAnal/backend/crawler",
+  "name": "wxPubAnal-backend-crawler",
   "version": "1.1.1",
   "description": "wechat spider by Man-in-the-middle attack",
   "main": "index.js",

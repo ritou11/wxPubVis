@@ -4,7 +4,6 @@ const cors = require('cors');
 const nocache = require('nocache');
 const bodyParser = require('body-parser');
 const { graphqlExpress } = require('apollo-server-express');
-const status = require('../status');
 const { schema } = require('./graphql');
 const { expressTh } = require('./throttle');
 const logger = require('../logger')('index');
@@ -25,11 +24,7 @@ router.use(cors({
 
 router.get('/', (req, res) => {
   logger.trace('GET /');
-  if (status) {
-    res.status(200).json(status);
-  } else {
-    res.status(500).send();
-  }
+  res.status(500).send();
 });
 
 router.use(

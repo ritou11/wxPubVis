@@ -1,11 +1,10 @@
 const _ = require('lodash');
 const { makeExecutableSchema } = require('graphql-tools');
 const fs = require('fs');
-const { Item } = require('../../models/items');
-const { Author } = require('../../models/authors');
-const { Major } = require('../../models/majors');
-const { Ballot } = require('../../models/ballots');
-const { Vote } = require('../../models/votes');
+const { Comment } = require('../../models/comment');
+const { Post } = require('../../models/post');
+const { Profile } = require('../../models/profile');
+const { ProfilePubRecord } = require('../../models/profilePubRecord');
 const { project, resolvers } = require('./projection');
 
 const typeDefs = fs.readFileSync('./docs/wechat.graphql', 'utf8');

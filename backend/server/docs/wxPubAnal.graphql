@@ -1,103 +1,78 @@
 # Entry points
 
 type Query {
-  status: Status
-  list(input: ListInput!): [Item!]
-  item(input: ItemInput!): Item
-  myTickets(input: MyTicketsInput!): Int
-  majors: [Major!]
-  ballot(input: BallotInput!): Ballot
-}
-
-type Mutation {
-  vote(input: VoteInput!): String
-  openSession(input: SessionInput!): SessionRes
+  post(input: PInput!): Post
+  profile(input: PInput!): Profile
+  postList(input: PostListInput!): [Post!]
+  profileList(input: ProfileListInput!): [Profile!]
+  postVis(input: PVisInput!): PostVis
+  profileVis(input: PVisInput!): ProfileVis
+  searchPost(input: SearchInput!): [Post!]
+  searchProfile(input: SearchInput!): [Profile!]
 }
 
 # Inputs
-
-input ListInput {
-  bId: ID!
-  token: Token
-  skip: Int!
-  count: Int!
-  search: SearchContent
+input SearchInput {
+  sId: ID
+  name: String
 }
 
-input SearchContent {
-  major: String
-  iId: Int
-  author: String
+input PInput {
+  pId: ID
 }
 
-input MyTicketsInput {
-  bId: ID!
-  token: Token!
+input PostListInput {
+  pId: ID
+  skip: Int
+  count: Int
+  sort: String
 }
 
-input ItemInput {
-  bId: ID!
-  iId: Int!
-  token: Token
+input ProfileListInput {
+  skip: Int
+  count: Int
+  sort: String
 }
 
-input BallotInput {
-  bId: ID!
+input PVisInput {
+  pId: ID!
+  vis: String!
 }
 
-input VoteInput {
-  bId: ID!
-  iId: Int!
-  token: Token!
-}
-
-input SessionInput {
-  code: String!
-}
-
-input Token {
-  code: String
-  openId: String
-}
 # Objects
-
-type Status {
-  version: String
-  commitHash: String
-}
-
-type Ballot {
-  icon: String
+type Post {
+  pId: ID!
+  wechatId: String
   title: String
-  maxTickets: Int!
+  digest: String
+  msgBiz: String
+  msgIdx: String
+  msgMid: String
+  publishAt: String # TODO
+  createdAt: String # TODO
+  updatedAt: String # TODO
+  sourceUrl: String
+  cover: String
+  content: String
+  likeNum: Int
+  readNum: Int
+  link: String
 }
 
-type Item {
-  bId: ID!
-  iId: Int!
-  image: String
+type Profile {
+  pId: ID!
+  wechatId: ID
+  msgBiz: String
+  headimg: String
   title: String
-  intro: String
-  brief: String
-  author: [Author!]
-  tickets: Int
-  isVoted: Boolean!
+  createdAt: String # TODO: time
+  updatedAt: String # TODO: time
 }
 
-type Author {
-  aId: ID!
-  name: String
-  major: Major
-  number: String
+type PostVis {
+  img: String
 }
 
-type Major {
-  mId: ID!
-  name: String
-  alias: [String!]
-}
-
-type SessionRes {
-  errMsg: String
-  openId: String
+type ProfileVis {
+  img: String
 }

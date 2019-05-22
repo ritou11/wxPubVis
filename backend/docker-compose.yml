@@ -37,6 +37,9 @@ services:
       - main
   mongo:
     image: mongo:3.6
+    ports:
+      # !!! development !!!
+      - 27017:27017
     volumes:
       - mongodata:/data/db
     networks:

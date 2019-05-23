@@ -7,7 +7,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.min.css';
-import './style/style.css';
+import './App.css';
 
 import { closeMessage } from './actions';
 
@@ -42,6 +42,7 @@ class App extends React.Component {
               <ListItem button onClick={() => { history.push('/'); }}> 首页 </ListItem>
               <ListItem button onClick={() => { history.push('/posts'); }}> 文章 </ListItem>
               <ListItem button onClick={() => { history.push('/profiles'); }}> 公众号 </ListItem>
+              <ListItem button onClick={() => { history.push('/vis'); }}> 可视化 </ListItem>
             </List>
           </Drawer>
           <div className="wrapper">

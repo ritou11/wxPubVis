@@ -42,7 +42,6 @@ export function receivePosts(posts) {
 
 export function fetchPosts(query) {
   const path = assembleUrl(config.posts, query);
-  console.log(path);
   return (dispatch) => {
     dispatch(requestPosts());
     return fetch(path).then((res) => res.json()).then((posts) => {

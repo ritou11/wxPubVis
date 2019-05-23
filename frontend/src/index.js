@@ -16,7 +16,6 @@ import reducer from './reducers';
 
 import Posts from './containers/posts.jsx';
 import Profiles from './containers/profiles.jsx';
-import Doc from './containers/doc.jsx';
 
 const ENV = process.env.NODE_ENV || 'development';
 
@@ -42,9 +41,7 @@ ReactDOM.render(
         <Router history={browserHistory}>
           <Route exact path="/" component={Posts} />
           <Route path="/posts" component={Posts} />
-          <Route path="/posts/:id" component={Doc} />
           <Route path="/profiles" component={Profiles} />
-          <Route path="/profiles/:id" component={Doc} />
           <Route path="/vis" component={D3app} />
         </Router>
       </App>

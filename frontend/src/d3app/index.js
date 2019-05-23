@@ -84,7 +84,7 @@ const styles = {
   diagPaper: { height: '100%' },
 };
 
-class App extends Component {
+class D3app extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -260,4 +260,4 @@ class App extends Component {
   }
 }
 
-export default withStyles(styles)(App);
+export default withStyles(styles)(D3app);

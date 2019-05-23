@@ -2,6 +2,7 @@
 
 const http = require('http');
 const express = require('express');
+const cors = require('cors');
 const logger = require('morgan');
 const path = require('path');
 const app = express();
@@ -12,6 +13,18 @@ const { Category } = models;
 const api = require('./api');
 
 app.use(logger('dev'));
+
+app.use(cors({
+  origin: [
+    process.env.CORS_ORIGIN,
+    /^https?:\/\/localhost(:\d+)?$/,
+  ],
+  methods: ['HEAD', 'GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  maxAge: 300000,
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

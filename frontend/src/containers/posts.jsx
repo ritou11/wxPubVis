@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { fetchPosts, assembleUrl } from '../actions';
 import Loading from '../components/loading.jsx';
 import Paginator from '../components/paginator.jsx';
-import RaisedButton from '@material-ui/core/Button';
+import Button from '@material-ui/core/Button';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import Search from './search.jsx';
@@ -81,7 +81,7 @@ class Posts extends React.Component {
   judeMainDataShow(key) {
     const searchArgs = this.returnCurrentSearchArgs();
     const mainDataVal = searchArgs.mainData;
-    const primary = { primary: true };
+    const primary = { primary: 'true' };
     if (key === 'all' && !mainDataVal) return primary;
     if (key === 'yes' && mainDataVal === 'true') return primary;
     if (key === 'no' && mainDataVal === 'false') return primary;
@@ -100,22 +100,22 @@ class Posts extends React.Component {
     if (metadata) count = metadata.count;
     return (
       <div>
-        <RaisedButton {...this.judeMainDataShow('all')} onClick={() => {
+        <Button {...this.judeMainDataShow('all')} onClick={() => {
           const nextQuery = { ...searchArgs };
           delete nextQuery.mainData;
           const path = assembleUrl(pathname, nextQuery);
           history.push(path);
-        }} label="全部数据" style={style} />
-        <RaisedButton {...this.judeMainDataShow('yes')} onClick={() => {
+        }} style={style} variant="contained"> 全部数据 </Button>
+        <Button {...this.judeMainDataShow('yes')} onClick={() => {
           const nextQuery = { ...searchArgs, mainData: 'true' };
           const path = assembleUrl(pathname, nextQuery);
           history.push(path);
-        }} label="有阅读量" style={style} />
-        <RaisedButton {...this.judeMainDataShow('no')} onClick={() => {
+        }} style={style} variant="contained"> 有阅读量 </Button>
+        <Button {...this.judeMainDataShow('no')} onClick={() => {
           const nextQuery = { ...searchArgs, mainData: 'false' };
           const path = assembleUrl(pathname, nextQuery);
           history.push(path);
-        }} label="无阅读量" style={style} />
+        }} style={style} variant="contained"> 无阅读量 </Button>
         { !count ? '' : <span>共{count}条数据</span> }
       </div>
     );

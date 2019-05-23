@@ -26,7 +26,7 @@ export default class SearchInput extends React.Component {
             onEnter(q);
           }
         }}
-        hintText={hintText}
+        placeholder={hintText}
         fullWidth={fullWidth}
       />
     );

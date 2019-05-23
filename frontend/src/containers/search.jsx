@@ -14,13 +14,13 @@ class Search extends React.Component {
     if (nextQuery.page) delete nextQuery.page;
     return (
       <div style={{
-        padding: '0px 5px 10px 5px'
+        padding: '0px 5px 10px 5px',
       }}>
         <SearchInput
           value={q}
           placeholder={defaultText}
           fullWidth={true}
-          onEnter={q => {
+          onEnter={(q) => {
             if (q) nextQuery.q = q;
             if (!q && nextQuery.q) delete nextQuery.q;
             const path = assembleUrl(pathname, nextQuery);

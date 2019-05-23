@@ -1,26 +1,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchPosts, assembleUrl } from '../actions';
-import Loading from '../components/loading.jsx';
-import Paginator from '../components/paginator.jsx';
 import Button from '@material-ui/core/Button';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import { fetchPosts, assembleUrl } from '../actions';
+import Loading from '../components/loading.jsx';
+import Paginator from '../components/paginator.jsx';
 import Search from './search.jsx';
 
 function timeDiff(update, publish) {
-  let updateMoment = moment(update);
-  let publishMoment = moment(publish);
-  let days = updateMoment.diff(publishMoment, 'days');
+  const updateMoment = moment(update);
+  const publishMoment = moment(publish);
+  const days = updateMoment.diff(publishMoment, 'days');
   if (days < 31) return `${days}天`;
-  let months = updateMoment.diff(publishMoment, 'months');
+  const months = updateMoment.diff(publishMoment, 'months');
   if (months < 13) return `${months}月`;
-  let years = updateMoment.diff(publishMoment, 'years');
+  const years = updateMoment.diff(publishMoment, 'years');
   return `${years}年`;
 }
 
 class Posts extends React.Component {
-
   constructor(props) {
     super(props);
     this.sortByTime = this.sortByTime.bind(this);
@@ -29,14 +28,14 @@ class Posts extends React.Component {
   }
 
   componentDidMount() {
-    let { dispatch, location } = this.props;
+    const { dispatch, location } = this.props;
+    console.log(location);
     dispatch(fetchPosts(location.query));
   }
 
-  // eslint-disable-next-line
   componentWillReceiveProps(nextProps) {
     if (nextProps.location.search !== this.props.location.search) {
-      let { dispatch } = this.props;
+      const { dispatch } = this.props;
       dispatch(fetchPosts(nextProps.location.query));
     }
   }
@@ -45,9 +44,9 @@ class Posts extends React.Component {
     const { location } = this.props;
     const { search } = location;
     const searchArgs = {};
-    search.replace('?', '').split('&').forEach(item => {
-      let key = item.split('=')[0];
-      let value = item.replace(`${key}=`, '');
+    search.replace('?', '').split('&').forEach((item) => {
+      const key = item.split('=')[0];
+      const value = item.replace(`${key}=`, '');
       if (key && value) searchArgs[key] = value;
     });
     return searchArgs;
@@ -72,7 +71,7 @@ class Posts extends React.Component {
       }
     }
     const nextQuery = Object.assign({}, searchArgs, {
-      sortWay: nextSortType
+      sortWay: nextSortType,
     });
     const path = assembleUrl(pathname, nextQuery);
     return (<i onClick={() => { history.push(path); }} className={`fa ${iconClass}`}></i>);
@@ -93,7 +92,7 @@ class Posts extends React.Component {
     const { pathname } = location;
     const searchArgs = this.returnCurrentSearchArgs();
     const style = {
-      margin: '10px 15px 10px 0'
+      margin: '10px 15px 10px 0',
     };
     const { metadata } = posts;
     let count;
@@ -128,7 +127,7 @@ class Posts extends React.Component {
     const { metadata, data } = posts;
 
     // show
-    const showData = data.map(i => {
+    const showData = data.map((i) => {
       let showTitle = i.title.substr(0, 25) || '暂无';
       if (i.link) {
         showTitle = <a title={i.title} href={i.link} rel="noopener noreferrer" target="_blank">{showTitle}</a>;
@@ -146,11 +145,11 @@ class Posts extends React.Component {
         updateInterval: (i.updateNumAt && i.publishAt) ? timeDiff(i.updateNumAt, i.publishAt) : '',
         showProfile: <Link to={`/posts?msgBiz=${i.msgBiz}`}>
           {i.profile ? (<span>
-              <img style={{ height: '24px', marginRight: '3px' }}
-                   src={i.profile.headimg}
-                   className="img-circle" />
-              {i.profile.title}
-            </span>) : i.msgBiz}</Link>
+            <img style={{ height: '24px', marginRight: '3px' }}
+              src={i.profile.headimg}
+              className="img-circle" />
+            {i.profile.title}
+          </span>) : i.msgBiz}</Link>,
       };
     });
 
@@ -180,22 +179,20 @@ class Posts extends React.Component {
           </thead>
           <tbody>
             {
-              showData.map(i => {
-                return (
-                  <tr key={i.id}>
-                    <td>{i.id}</td>
-                    <td>{i.publishAt}</td>
-                    <td>{i.showTitle}</td>
-                    <td>{i.msgIdx}</td>
-                    <td>{i.readNum}</td>
-                    <td>{i.likeNum}</td>
-                    <td>{i.updateNumAt}</td>
-                    <td>{i.updateInterval}</td>
-                    <td>{i.showProfile}</td>
-                    <td><Link to={`/posts/${i.id}`}>详情</Link></td>
-                  </tr>
-                );
-              })
+              showData.map((i) => (
+                <tr key={i.id}>
+                  <td>{i.id}</td>
+                  <td>{i.publishAt}</td>
+                  <td>{i.showTitle}</td>
+                  <td>{i.msgIdx}</td>
+                  <td>{i.readNum}</td>
+                  <td>{i.likeNum}</td>
+                  <td>{i.updateNumAt}</td>
+                  <td>{i.updateInterval}</td>
+                  <td>{i.showProfile}</td>
+                  <td><Link to={`/posts/${i.id}`}>详情</Link></td>
+                </tr>
+              ))
             }
           </tbody>
         </table>
@@ -205,4 +202,4 @@ class Posts extends React.Component {
   }
 }
 
-export default connect(state => state)(Posts);
+export default connect((state) => state)(Posts);

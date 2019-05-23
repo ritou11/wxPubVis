@@ -1,21 +1,22 @@
 import config from './config';
 
-export function assembleUrl(path = '', params = {}, method) {
+export function assembleUrl(path, params, method) {
+  const fparams = params || {};
   const m = method ? method.toLowerCase() : 'get';
   let p = path;
-  Object.keys(params).forEach((key) => {
-    let _path = p.replace(`:${key}`, params[key]);
+  Object.keys(fparams).forEach((key) => {
+    let _path = p.replace(`:${key}`, fparams[key]);
     if (_path === p) {
       if (m === 'get') {
         if (_path.indexOf('?') === -1) {
-          _path = `${_path}?${key}=${params[key]}`;
+          _path = `${_path}?${key}=${fparams[key]}`;
         } else {
-          _path = `${_path}&${key}=${params[key]}`;
+          _path = `${_path}&${key}=${fparams[key]}`;
         }
-        delete params[key];
+        delete fparams[key];
       }
     } else {
-      delete params[key];
+      delete fparams[key];
     }
     p = _path;
   });
@@ -41,6 +42,7 @@ export function receivePosts(posts) {
 
 export function fetchPosts(query) {
   const path = assembleUrl(config.posts, query);
+  console.log(path);
   return (dispatch) => {
     dispatch(requestPosts());
     return fetch(path).then((res) => res.json()).then((posts) => {

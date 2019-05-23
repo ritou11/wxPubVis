@@ -4,6 +4,8 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { Route, Router } from 'react-router';
 import { createBrowserHistory } from 'history';
+import qhistory from 'qhistory';
+import { stringify, parse } from 'qs';
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
 import D3app from './d3app';
@@ -27,14 +29,15 @@ const store = createStore(
   applyMiddleware(...reduxMiddlewares),
 );
 
-const browserHistory = createBrowserHistory({
-  basename: '/',
-});
+const browserHistory = qhistory(
+  createBrowserHistory({ basename: '/' }),
+  stringify,
+  parse,
+);
 
 ReactDOM.render(
   (
     <Provider store={store}>
-
       <App history={browserHistory}>
         <Router history={browserHistory}>
           <Route exact path="/" component={Posts} />
@@ -44,7 +47,6 @@ ReactDOM.render(
           <Route path="/profiles/:id" component={Doc} />
           <Route path="/vis" component={D3app} />
         </Router>
-
       </App>
     </Provider>
   ),

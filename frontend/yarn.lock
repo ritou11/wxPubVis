@@ -9033,12 +9033,19 @@ q@^1.1.2:
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
   integrity sha1-fjL3W0E4EpHQRhHxvxQQmsAGUdc=
 
+qhistory@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/qhistory/-/qhistory-1.0.3.tgz#f8f0fb8f5610304ca44be7ced87c74e1ea606a8f"
+  integrity sha512-fEihc5VureL8SOomljbKRVYUKAVmLce7xk5FUWMXHJ56Yb/9LG6SufsFX7n0rWaIy4xi2fZUfSjYMo5Us9d9fQ==
+  dependencies:
+    invariant "^2.2.2"
+
 qs@6.5.2, qs@~6.5.2:
   version "6.5.2"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
   integrity sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
 
-qs@^6.5.2:
+qs@^6.5.2, qs@^6.7.0:
   version "6.7.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.7.0.tgz#41dc1a015e3d581f1621776be31afb2876a9b1bc"
   integrity sha512-VCdBRNFTX1fyE7Nb6FYoURo/SPe62QCaAyzJvUjwRaIsc+NePBEniHlvxFmmX56+HZphIGtV0XeCirBtpDrTyQ==

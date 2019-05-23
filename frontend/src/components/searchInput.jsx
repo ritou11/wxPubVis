@@ -12,7 +12,7 @@ export default class SearchInput extends React.Component {
 
   render() {
     const { q } = this.state;
-    const { onEnter, hintText = '', fullWidth = false } = this.props;
+    const { onEnter, placeholder = '', fullWidth = false } = this.props;
     return (
       <TextField
         value={q}
@@ -22,11 +22,11 @@ export default class SearchInput extends React.Component {
           });
         }}
         onKeyPress={event => {
-          if (event.key == 'Enter') {
+          if (event.key === 'Enter') {
             onEnter(q);
           }
         }}
-        placeholder={hintText}
+        placeholder={placeholder}
         fullWidth={fullWidth}
       />
     );
@@ -36,6 +36,6 @@ export default class SearchInput extends React.Component {
 SearchInput.propTypes = {
   onEnter: PropTypes.func.isRequired,
   value: PropTypes.string,
-  hintText: PropTypes.string,
+  placeholder: PropTypes.string,
   fullWidth: PropTypes.bool
 };

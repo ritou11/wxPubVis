@@ -34,18 +34,18 @@ const browserHistory = createBrowserHistory({
 ReactDOM.render(
   (
     <Provider store={store}>
-      <Router history={browserHistory}>
-        <App>
+
+      <App history={browserHistory}>
+        <Router history={browserHistory}>
           <Route exact path="/" component={Posts} />
           <Route path="/posts" component={Posts} />
           <Route path="/posts/:id" component={Doc} />
-          <Route path="/posts/:id/edit" component={Doc} />
           <Route path="/profiles" component={Profiles} />
           <Route path="/profiles/:id" component={Doc} />
-          <Route path="/profiles/:id/edit" component={Doc} />
           <Route path="/vis" component={D3app} />
-        </App>
-      </Router>
+        </Router>
+
+      </App>
     </Provider>
   ),
   document.getElementById('root'),

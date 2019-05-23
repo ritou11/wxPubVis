@@ -3,11 +3,6 @@ import { assembleUrl } from '../actions';
 import SearchInput from '../components/searchInput.jsx';
 
 class Search extends React.Component {
-
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { location, history, searchArgs, defaultText } = this.props;
     const { pathname } = location;
@@ -23,7 +18,7 @@ class Search extends React.Component {
       }}>
         <SearchInput
           value={q}
-          hintText={defaultText}
+          placeholder={defaultText}
           fullWidth={true}
           onEnter={q => {
             if (q) nextQuery.q = q;

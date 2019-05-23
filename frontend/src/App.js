@@ -1,32 +1,57 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import { MuiThemeProvider, createMuiTheme, withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Drawer from '@material-ui/core/Drawer';
-import { List, ListItem } from '@material-ui/core/List';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.min.css';
 import './style/style.css';
 
 import { closeMessage } from './actions';
 
+const theme = createMuiTheme({
+  typography: {
+    useNextVariants: true,
+  },
+});
+
+const styles = (theme) => ({
+  root: {
+    display: 'flex',
+  },
+  drawer: {
+    width: 100,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: 100,
+  },
+  toolbar: theme.mixins.toolbar,
+  content: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.default,
+    padding: theme.spacing.unit * 3,
+  },
+});
+
 class App extends React.Component {
   render() {
     const { history, message, dispatch } = this.props;
+    const { classes } = this.props;
     return (
-      <MuiThemeProvider>
+      <MuiThemeProvider theme={theme}>
         <div>
-          <Drawer width={100} open={true} >
-            <AppBar title="首页"
-              style={{ padding: '0 16px' }}
-              showMenuIconButton={false}
-              titleStyle={{ cursor: 'pointer' }}
-              onTitleTouchTap={() => { history.push('/'); }}
-            />
+          <Drawer className={classes.drawer}
+            classes={{ paper: classes.drawerPaper }}
+            open={true}
+            variant={'persistent'}>
             <List>
-              <ListItem primaryText="文章" onClick={() => { history.push('/posts'); }} />
-              <ListItem primaryText="公众号" onClick={() => { history.push('/profiles'); }} />
+              <ListItem button onClick={() => { history.push('/'); }}> 首页 </ListItem>
+              <ListItem button onClick={() => { history.push('/posts'); }}> 文章 </ListItem>
+              <ListItem button onClick={() => { history.push('/profiles'); }}> 公众号 </ListItem>
             </List>
           </Drawer>
           <div className="wrapper">
@@ -46,4 +71,4 @@ class App extends React.Component {
   }
 }
 
-export default connect((state) => state)(App);
+export default connect((state) => state)(withStyles(styles)(App));

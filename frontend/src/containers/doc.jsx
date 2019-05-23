@@ -15,10 +15,6 @@ import Loading from '../components/loading.jsx';
 import Edit from '../components/edit.jsx';
 
 class Doc extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   initDoc(props) {
     const { location, params, dispatch } = props;
     const { pathname } = location;

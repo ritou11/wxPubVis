@@ -144,7 +144,13 @@ class Posts extends React.Component {
         likeNum: i.likeNum || '',
         updateNumAt: i.updateNumAt ? moment(i.updateNumAt).format('YY-MM-DD HH:mm') : '暂无',
         updateInterval: (i.updateNumAt && i.publishAt) ? timeDiff(i.updateNumAt, i.publishAt) : '',
-        showProfile: <Link to={`/posts?msgBiz=${i.msgBiz}`}>{i.profile ? (<span><img style={{ height: '24px', marginRight: '3px' }} src={i.profile.headimg} className="img-circle" />{i.profile.title}</span>) : i.msgBiz}</Link>
+        showProfile: <Link to={`/posts?msgBiz=${i.msgBiz}`}>
+          {i.profile ? (<span>
+              <img style={{ height: '24px', marginRight: '3px' }}
+                   src={i.profile.headimg}
+                   className="img-circle" />
+              {i.profile.title}
+            </span>) : i.msgBiz}</Link>
       };
     });
 

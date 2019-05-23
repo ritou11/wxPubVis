@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
 import { MuiThemeProvider, createMuiTheme, withStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -18,22 +17,13 @@ const theme = createMuiTheme({
   },
 });
 
-const styles = (theme) => ({
-  root: {
-    display: 'flex',
-  },
+const styles = () => ({
   drawer: {
     width: 100,
     flexShrink: 0,
   },
   drawerPaper: {
     width: 100,
-  },
-  toolbar: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 3,
   },
 });
 

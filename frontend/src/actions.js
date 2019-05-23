@@ -1,13 +1,12 @@
 import config from './config';
 
-export function assembleUrl(path, params, method) {
-  path = path || '';
-  params = params || {};
-  method = method ? method.toLowerCase() : 'get';
+export function assembleUrl(path = '', params = {}, method) {
+  const m = method ? method.toLowerCase() : 'get';
+  let p = path;
   Object.keys(params).forEach((key) => {
-    let _path = path.replace(`:${key}`, params[key]);
-    if (_path === path) {
-      if (method === 'get') {
+    let _path = p.replace(`:${key}`, params[key]);
+    if (_path === p) {
+      if (m === 'get') {
         if (_path.indexOf('?') === -1) {
           _path = `${_path}?${key}=${params[key]}`;
         } else {
@@ -18,9 +17,9 @@ export function assembleUrl(path, params, method) {
     } else {
       delete params[key];
     }
-    path = _path;
+    p = _path;
   });
-  return path;
+  return p;
 }
 
 export const REQUEST_POSTS = 'REQUEST_POSTS';
@@ -96,7 +95,7 @@ export function receiveProfiles(profiles) {
 
 export function fetchProfiles(query) {
   const path = assembleUrl(config.profiles, query);
-  return function (dispatch) {
+  return (dispatch) => {
     dispatch(requestProfiles());
     return fetch(path).then((res) => res.json()).then((profiles) => {
       dispatch(receiveProfiles(profiles));
@@ -123,7 +122,7 @@ export function receiveProfile(profile) {
 }
 
 export function fetchProfile(id) {
-  return function (dispatch) {
+  return (dispatch) => {
     dispatch(requestProfile(id));
     return fetch(`${config.profile}/${id}`).then((res) => res.json()).then((profile) => {
       dispatch(receiveProfile(profile));
@@ -150,7 +149,7 @@ export function receiveCates(cates) {
 
 export function fetchCates(query) {
   const path = assembleUrl(config.cates, query);
-  return function (dispatch) {
+  return (dispatch) => {
     dispatch(requestCates());
     return fetch(path).then((res) => res.json()).then((cates) => {
       dispatch(receiveCates(cates));
@@ -177,7 +176,7 @@ export function receiveCate(cate) {
 }
 
 export function fetchCate(id) {
-  return function (dispatch) {
+  return (dispatch) => {
     dispatch(requestCate(id));
     return fetch(`${config.cate}/${id}`).then((res) => res.json()).then((cate) => {
       dispatch(receiveCate(cate));
@@ -224,12 +223,12 @@ export const SHOW_MESSAGE = 'SHOW_MESSAGE';
 export const CLOSE_MESSAGE = 'CLOSE_MESSAGE';
 let msgTimeout = null;
 export function closeMessage() {
-  return function (dispatch) {
+  return (dispatch) => {
     dispatch({ type: CLOSE_MESSAGE });
   };
 }
 export function showMessage(content) {
-  return function (dispatch) {
+  return (dispatch) => {
     if (msgTimeout) {
       msgTimeout = null;
       clearTimeout(msgTimeout);
@@ -245,7 +244,7 @@ export function showMessage(content) {
 export const REQUEST_CONF = 'REQUEST_CONF';
 export const RECEIVE_CONF = 'RECEIVE_CONF';
 export function fetchConf() {
-  return function (dispatch) {
+  return (dispatch) => {
     dispatch({ type: REQUEST_CONF });
     return fetch(config.conf).then((res) => res.json()).then((conf) => {
       dispatch({ type: RECEIVE_CONF, conf });

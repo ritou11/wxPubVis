@@ -1,4 +1,5 @@
 import ApolloClient, { gql } from 'apollo-boost';
+import { ceil } from 'lodash';
 import config from './config';
 
 const client = new ApolloClient({
@@ -38,11 +39,17 @@ export function requestPosts() {
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 
-export function receivePosts(data) {
+export function receivePosts(data, skip) {
   return {
     type: RECEIVE_POSTS,
     posts: {
-      data,
+      data: data.postList,
+      metadata: {
+        count: data.totalPost,
+        totalPages: ceil(data.totalPost / 20),
+        currentPage: ceil((skip + 1) / 20),
+        perPage: 20,
+      },
     },
   };
 }
@@ -55,6 +62,7 @@ export function fetchPosts(query) {
     return client.query({
       query: gql`
         query {
+          totalPost( input:{${query.msgBiz ? `msgBiz:"${query.msgBiz}"` : ''}} )
           postList(
             input:{
               ${query.msgBiz ? `msgBiz:"${query.msgBiz}"` : ''}
@@ -76,7 +84,7 @@ export function fetchPosts(query) {
           }`,
     })
       .then(({ data }) => {
-        dispatch(receivePosts(data.postList));
+        dispatch(receivePosts(data, skip));
       });
   };
 }
@@ -118,11 +126,17 @@ export function requestProfiles() {
 
 export const RECEIVE_PROFILES = 'RECEIVE_PROFILES';
 
-export function receiveProfiles(data) {
+export function receiveProfiles(data, skip) {
   return {
     type: RECEIVE_PROFILES,
     profiles: {
-      data,
+      data: data.profileList,
+      metadata: {
+        count: data.totalProfile,
+        totalPages: ceil(data.totalProfile / 20),
+        currentPage: ceil((skip + 1) / 20),
+        perPage: 20,
+      },
     },
   };
 }
@@ -135,6 +149,7 @@ export function fetchProfiles(query) {
     return client.query({
       query: gql`
         query {
+          totalProfile
           profileList(
             input:{
               skip:${skip}
@@ -154,7 +169,7 @@ export function fetchProfiles(query) {
           }`,
     })
       .then(({ data }) => {
-        dispatch(receiveProfiles(data.profileList));
+        dispatch(receiveProfiles(data, skip));
       });
   };
 }

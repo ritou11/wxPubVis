@@ -139,8 +139,8 @@ class Posts extends React.Component {
         msgIdx: i.msgIdx || '0',
         readNum: i.readNum || '',
         likeNum: i.likeNum || '',
-        updateNumAt: i.updateNumAt ? moment(i.updateNumAt).format('YY-MM-DD HH:mm') : '暂无',
-        updateInterval: (i.updateNumAt && i.publishAt) ? timeDiff(i.updateNumAt, i.publishAt) : '',
+        updatedAt: i.updatedAt ? moment(i.updatedAt).format('YY-MM-DD HH:mm') : '暂无',
+        updateInterval: (i.updatedAt && i.publishAt) ? timeDiff(i.updatedAt, i.publishAt) : '',
         showProfile: <Link to={`/posts?msgBiz=${i.msgBiz}`}>
           {i.profile ? (<span>
             <img style={{ height: '24px', marginRight: '3px' }}
@@ -169,7 +169,7 @@ class Posts extends React.Component {
               <th>位置</th>
               <th>阅读数</th>
               <th>点赞数</th>
-              <th>更新时间 {this.sortByTime('updateNumAt')}</th>
+              <th>更新时间 {this.sortByTime('updatedAt')}</th>
               <th>间隔</th>
               <th>公众号</th>
               <th>详情</th>
@@ -185,7 +185,7 @@ class Posts extends React.Component {
                   <td>{i.msgIdx}</td>
                   <td>{i.readNum}</td>
                   <td>{i.likeNum}</td>
-                  <td>{i.updateNumAt}</td>
+                  <td>{i.updatedAt}</td>
                   <td>{i.updateInterval}</td>
                   <td>{i.showProfile}</td>
                   <td><Link to={`/posts/${i.id}`}>详情</Link></td>

@@ -16,6 +16,7 @@ import reducer from './reducers';
 
 import Posts from './containers/posts';
 import Profiles from './containers/profiles';
+import Vis from './containers/vis';
 
 const ENV = process.env.NODE_ENV || 'development';
 
@@ -42,7 +43,8 @@ ReactDOM.render(
           <Route exact path="/" component={Posts} />
           <Route path="/posts" component={Posts} />
           <Route path="/profiles" component={Profiles} />
-          <Route path="/vis" component={D3app} />
+          <Route path="/colorana" component={D3app} />
+          <Route path="/vis" component={Vis} />
         </Router>
       </App>
     </Provider>

@@ -42,6 +42,7 @@ class App extends React.Component {
               <ListItem button onClick={() => { history.push('/'); }}> 首页 </ListItem>
               <ListItem button onClick={() => { history.push('/posts'); }}> 文章 </ListItem>
               <ListItem button onClick={() => { history.push('/profiles'); }}> 公众号 </ListItem>
+              <ListItem button onClick={() => { history.push('/colorana'); }}> D3实例 </ListItem>
               <ListItem button onClick={() => { history.push('/vis'); }}> 可视化 </ListItem>
             </List>
           </Drawer>

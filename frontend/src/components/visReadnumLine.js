@@ -40,6 +40,7 @@ export default class VisReadnumLine extends React.Component {
           series: [{
             name: '阅读量',
             type: 'scatter',
+            turboThreshold: 10000,
             data,
             tooltip: {
               headerFormat: '<span style="color:{point.color}">●</span> <span style="font-size: 10px">{point.key}</span><br/>',

@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { map, filter, sortBy } from 'lodash';
 import { withStyles } from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+
 import { Query, ApolloProvider } from 'react-apollo';
 import { ApolloClient, gql } from 'apollo-boost';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -19,55 +24,112 @@ const styles = {
     width: '100%',
     flexDirection: 'column',
   },
+  drawer: {
+    width: 240,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: 240,
+  },
 };
 
 class Vis extends Component {
+  state = {
+    msgBiz: '',
+  };
+
   render() {
+    const { classes } = this.props;
     return (
-      <ApolloProvider client={client}>
-        <Query
-          query={gql`
-            {
-              postList(
-                input:{
-                  msgBiz:"MzUxODM4OTYzMg=="
-                  skip:0
-                  count:-1
+      <div>
+        <ApolloProvider client={client}>
+          <Query
+            query={gql`
+              {
+                postList(
+                  input:{
+                    msgBiz:"${this.state.msgBiz}"
+                    skip:0
+                    count:-1
+                  }
+                ) {
+                  title
+                  publishAt
+                  readNum
+                  }
+              }
+            `}
+          >
+            {({ loading, error, data }) => {
+              if (loading) return <p>Loading...</p>;
+              if (error) return <p>Error :(</p>;
+              const nestedData = sortBy(
+                filter(map(data.postList, (d) => {
+                  if (d.readNum && d.publishAt) {
+                    return ({
+                      x: new Date(d.publishAt),
+                      y: d.readNum - 1,
+                      name: d.title,
+                    });
+                  }
+                  return null;
+                })), (d) => d.x,
+              );
+              return (
+                <VisReadnumLine
+                  height={400}
+                  width={800}
+                  title={this.state.title}
+                  data={nestedData}
+                />
+              );
+            }}
+          </Query>
+          <Drawer className={classes.drawer}
+            classes={{ paper: classes.drawerPaper }}
+            open={true}
+            variant="permanent"
+            anchor="right">
+            <Query
+              query={gql`
+                {
+                  profileList(
+                    input:{
+                      skip:0
+                      count:20
+                    }
+                  ) {
+                      title
+                      msgBiz
+                      headimg
+                    }
                 }
-              ) {
-                title
-                publishAt
-                readNum
-                }
-            }
-          `}
-        >
-          {({ loading, error, data }) => {
-            if (loading) return <p>Loading...</p>;
-            if (error) return <p>Error :(</p>;
-            const nestedData = sortBy(
-              filter(map(data.postList, (d) => {
-                if (d.readNum && d.publishAt) {
-                  return ({
-                    x: new Date(d.publishAt),
-                    y: d.readNum - 1,
-                    name: d.title,
-                  });
-                }
-                return null;
-              })), (d) => d.x,
-            );
-            return (
-              <VisReadnumLine
-                height={400}
-                width={800}
-                title={'清华小五爷园'}
-                data={nestedData}
-              />
-            );
-          }}
-        </Query>
-      </ApolloProvider>
+              `}
+            >
+              {({ loading, error, data }) => (
+                <List>
+                  {(() => {
+                    if (loading) return <ListItem>Loading...</ListItem>;
+                    if (error) return <ListItem>Error :(</ListItem>;
+                    return map(data.profileList, (d) => (
+                      <ListItem button
+                        key={d.msgBiz}
+                        onClick={() => {
+                          this.setState({
+                            msgBiz: d.msgBiz,
+                            title: d.title,
+                          });
+                        }}>
+                        <ListItemText primary={d.title} />
+                      </ListItem>
+                    ));
+                  })()}
+                </List>
+              )}
+            </Query>
+          </Drawer>
+        </ApolloProvider>
+      </div>
     );
   }
 }

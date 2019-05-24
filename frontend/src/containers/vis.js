@@ -5,6 +5,7 @@ import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 
 import { Query, ApolloProvider } from 'react-apollo';
 import { ApolloClient, gql } from 'apollo-boost';
@@ -77,8 +78,8 @@ class Vis extends Component {
               );
               return (
                 <VisReadnumLine
-                  height={400}
-                  width={800}
+                  height={500}
+                  width={1000}
                   title={this.state.title}
                   data={nestedData}
                 />
@@ -88,7 +89,7 @@ class Vis extends Component {
           <Drawer className={classes.drawer}
             classes={{ paper: classes.drawerPaper }}
             open={true}
-            variant="permanent"
+            variant="persistent"
             anchor="right">
             <Query
               query={gql`
@@ -120,6 +121,13 @@ class Vis extends Component {
                             title: d.title,
                           });
                         }}>
+                        <ListItemIcon>
+                          <img
+                            style={{ height: '24px', marginRight: '3px' }}
+                            src={d.headimg}
+                            alt={`${d.title}.headimg`}
+                            className="img-circle" />
+                        </ListItemIcon>
                         <ListItemText primary={d.title} />
                       </ListItem>
                     ));

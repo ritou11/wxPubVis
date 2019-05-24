@@ -72,7 +72,11 @@ class Profiles extends React.Component {
                 <tr key={profile.pId}>
                   <td>{profile.pId}</td>
                   <td>{profile.updatedAt ? moment(profile.updatedAt).format('YY-MM-DD HH:mm') : ''}</td>
-                  <td><img style={{ height: '24px', marginRight: '3px' }} src={profile.headimg} className="img-circle" /></td>
+                  <td><img
+                    style={{ height: '24px', marginRight: '3px' }}
+                    src={profile.headimg}
+                    alt={`${profile.title}.headimg`}
+                    className="img-circle" /></td>
                   <td><Link to={`/posts?msgBiz=${profile.msgBiz}`}>{profile.title}</Link></td>
                   <td>{profile.postsAllCount}</td>
                   <td>{profile.postsDataCount}</td>

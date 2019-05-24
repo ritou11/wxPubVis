@@ -104,6 +104,8 @@ export function receiveProfiles(data) {
 }
 
 export function fetchProfiles(query) {
+  let skip = ((query.page - 1) * query.perPage) || 0;
+  skip = +(skip > 0) && skip;
   return (dispatch) => {
     dispatch(requestProfiles());
     return client.query({
@@ -111,8 +113,8 @@ export function fetchProfiles(query) {
         query {
           profileList(
             input:{
-              skip:0
-              count:5
+              skip:${skip}
+              count:${query.perPage || 20}
             }
           ) {
               pId
@@ -120,6 +122,8 @@ export function fetchProfiles(query) {
               msgBiz
               headimg
               title
+              postsAllCount
+              postsDataCount
               createdAt
               updatedAt
             }

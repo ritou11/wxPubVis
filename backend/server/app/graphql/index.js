@@ -32,7 +32,7 @@ const schema = makeExecutableSchema({
       async profileList(parent, { input }, context, info) {
         const proj = project(info);
         if (input.count === 0) return null;
-        let result = await Profile.find({},
+        const result = await Profile.find({},
           proj,
           {
             skip: input.skip || 0,
@@ -42,7 +42,22 @@ const schema = makeExecutableSchema({
           return result.map((r) => r && r.toObject());
         }
         return result;
-      }
+      },
+    },
+    Profile: {
+      async postsAllCount(parent) {
+        const res = await Post.find({
+          msgBiz: { $eq: parent.msgBiz },
+        }).count();
+        return res;
+      },
+      async postsDataCount(parent) {
+        const res = await Post.find({
+          msgBiz: { $eq: parent.msgBiz },
+          readNum: { $exists: true },
+        }).count();
+        return res;
+      },
     },
   }),
 });

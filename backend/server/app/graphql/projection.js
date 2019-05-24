@@ -9,6 +9,8 @@ module.exports = gqlProjection({
   Profile: {
     proj: {
       pId: '_id',
+      postsAllCount: null,
+      postsDataCount: null,
     },
   },
 });

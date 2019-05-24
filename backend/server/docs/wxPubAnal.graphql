@@ -65,6 +65,8 @@ type Profile {
   msgBiz: String
   headimg: String
   title: String
+  postsAllCount: Int
+  postsDataCount: Int
   createdAt: String # TODO: time
   updatedAt: String # TODO: time
 }

@@ -24,7 +24,7 @@ router.use(cors({
 
 router.get('/', (req, res) => {
   logger.trace('GET /');
-  res.status(200).send("ok");
+  res.status(200).send('ok');
 });
 
 router.use(

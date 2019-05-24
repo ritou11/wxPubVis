@@ -29,7 +29,6 @@ class Posts extends React.Component {
 
   componentDidMount() {
     const { dispatch, location } = this.props;
-    console.log(location);
     dispatch(fetchPosts(location.query));
   }
 

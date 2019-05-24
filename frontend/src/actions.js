@@ -1,4 +1,9 @@
+import ApolloClient, { gql } from 'apollo-boost';
 import config from './config';
+
+const client = new ApolloClient({
+  uri: 'http://localhost/api/graphql',
+});
 
 export function assembleUrl(path, params, method) {
   const fparams = params || {};
@@ -87,20 +92,42 @@ export function requestProfiles() {
 
 export const RECEIVE_PROFILES = 'RECEIVE_PROFILES';
 
-export function receiveProfiles(profiles) {
+export function receiveProfiles(data) {
+  console.log(data);
   return {
     type: RECEIVE_PROFILES,
-    profiles,
+    profiles: {
+      data,
+
+    },
   };
 }
 
 export function fetchProfiles(query) {
-  const path = assembleUrl(config.profiles, query);
   return (dispatch) => {
     dispatch(requestProfiles());
-    return fetch(path).then((res) => res.json()).then((profiles) => {
-      dispatch(receiveProfiles(profiles));
-    });
+    return client.query({
+      query: gql`
+        query {
+          profileList(
+            input:{
+              skip:0
+              count:5
+            }
+          ) {
+              pId
+              wechatId
+              msgBiz
+              headimg
+              title
+              createdAt
+              updatedAt
+            }
+          }`,
+    })
+      .then(({ data }) => {
+        dispatch(receiveProfiles(data.profileList));
+      });
   };
 }
 
@@ -131,94 +158,6 @@ export function fetchProfile(id) {
   };
 }
 
-export const REQUEST_CATES = 'REQUEST_CATES';
-
-export function requestCates() {
-  return {
-    type: REQUEST_CATES,
-  };
-}
-
-export const RECEIVE_CATES = 'RECEIVE_CATES';
-
-export function receiveCates(cates) {
-  return {
-    type: RECEIVE_CATES,
-    cates,
-  };
-}
-
-export function fetchCates(query) {
-  const path = assembleUrl(config.cates, query);
-  return (dispatch) => {
-    dispatch(requestCates());
-    return fetch(path).then((res) => res.json()).then((cates) => {
-      dispatch(receiveCates(cates));
-    });
-  };
-}
-
-export const REQUEST_CATE = 'REQUEST_CATE';
-
-export function requestCate(id) {
-  return {
-    type: REQUEST_CATE,
-    id,
-  };
-}
-
-export const RECEIVE_CATE = 'RECEIVE_CATE';
-
-export function receiveCate(cate) {
-  return {
-    type: RECEIVE_CATE,
-    cate,
-  };
-}
-
-export function fetchCate(id) {
-  return (dispatch) => {
-    dispatch(requestCate(id));
-    return fetch(`${config.cate}/${id}`).then((res) => res.json()).then((cate) => {
-      dispatch(receiveCate(cate));
-    });
-  };
-}
-
-// update post
-// TODO: 提取公共 http 请求逻辑
-export async function updatePost(id, doc) {
-  let res = await fetch(`${config.post}/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(doc),
-  });
-  res = res.json();
-  return res;
-}
-
-// update profile
-export async function updateProfile(id, doc) {
-  let res = await fetch(`${config.profile}/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(doc),
-  });
-  res = res.json();
-  return res;
-}
-
-// update category
-export async function updateCate(id, doc) {
-  let res = await fetch(`${config.cate}/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(doc),
-  });
-  res = res.json();
-  return res;
-}
-
 // message
 export const SHOW_MESSAGE = 'SHOW_MESSAGE';
 export const CLOSE_MESSAGE = 'CLOSE_MESSAGE';
@@ -239,25 +178,4 @@ export function showMessage(content) {
       dispatch({ type: CLOSE_MESSAGE });
     }, 1000);
   };
-}
-
-// server side config
-export const REQUEST_CONF = 'REQUEST_CONF';
-export const RECEIVE_CONF = 'RECEIVE_CONF';
-export function fetchConf() {
-  return (dispatch) => {
-    dispatch({ type: REQUEST_CONF });
-    return fetch(config.conf).then((res) => res.json()).then((conf) => {
-      dispatch({ type: RECEIVE_CONF, conf });
-    });
-  };
-}
-export async function updateConf(doc) {
-  let res = await fetch(config.conf, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(doc),
-  });
-  res = res.json();
-  return res;
 }

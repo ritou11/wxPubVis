@@ -133,7 +133,7 @@ class Posts extends React.Component {
         showTitle = <a title={i.title}>{showTitle}</a>;
       }
       return {
-        id: i.id,
+        pId: i.pId,
         publishAt: i.publishAt ? moment(i.publishAt).format('YY-MM-DD HH:mm') : '暂无',
         showTitle,
         msgIdx: i.msgIdx || '0',
@@ -178,8 +178,8 @@ class Posts extends React.Component {
           <tbody>
             {
               showData.map((i) => (
-                <tr key={i.id}>
-                  <td>{i.id}</td>
+                <tr key={i.pId}>
+                  <td>{i.pId}</td>
                   <td>{i.publishAt}</td>
                   <td>{i.showTitle}</td>
                   <td>{i.msgIdx}</td>

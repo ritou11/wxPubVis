@@ -38,20 +38,46 @@ export function requestPosts() {
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 
-export function receivePosts(posts) {
+export function receivePosts(data) {
   return {
     type: RECEIVE_POSTS,
-    posts,
+    posts: {
+      data,
+    },
   };
 }
 
 export function fetchPosts(query) {
-  const path = assembleUrl(config.posts, query);
+  let skip = ((query.page - 1) * query.perPage) || 0;
+  skip = +(skip > 0) && skip;
   return (dispatch) => {
     dispatch(requestPosts());
-    return fetch(path).then((res) => res.json()).then((posts) => {
-      dispatch(receivePosts(posts));
-    });
+    return client.query({
+      query: gql`
+        query {
+          postList(
+            input:{
+              ${query.msgBiz ? `msgBiz:"${query.msgBiz}"` : ''}
+              skip:${skip}
+              count:${query.perPage || 20}
+            }
+          ) {
+            pId
+            title
+            msgBiz
+            msgIdx
+            msgMid
+            publishAt
+            updatedAt
+            likeNum
+            readNum
+            link
+            }
+          }`,
+    })
+      .then(({ data }) => {
+        dispatch(receivePosts(data.postList));
+      });
   };
 }
 

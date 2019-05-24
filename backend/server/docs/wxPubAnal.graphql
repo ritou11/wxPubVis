@@ -4,7 +4,9 @@ type Query {
   post(input: PInput!): Post
   profile(input: PInput!): Profile
   postList(input: PostListInput!): [Post!]
+  totalPost(input: PostCountInput!): Int
   profileList(input: ProfileListInput!): [Profile!]
+  totalProfile: Int
   postVis(input: PVisInput!): PostVis
   profileVis(input: PVisInput!): ProfileVis
   searchPost(input: SearchInput!): [Post!]
@@ -22,10 +24,14 @@ input PInput {
 }
 
 input PostListInput {
-  pId: ID
+  msgBiz: ID
   skip: Int
   count: Int
   sort: String
+}
+
+input PostCountInput {
+  msgBiz: ID
 }
 
 input ProfileListInput {

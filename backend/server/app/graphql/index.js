@@ -1,10 +1,9 @@
 const _ = require('lodash');
 const { makeExecutableSchema } = require('graphql-tools');
 const fs = require('fs');
-const { Comment } = require('../../models/comment');
+// const { Comment } = require('../../models/comment');
 const { Post } = require('../../models/post');
 const { Profile } = require('../../models/profile');
-const { ProfilePubRecord } = require('../../models/profilePubRecord');
 const { project, resolvers } = require('./projection');
 
 const typeDefs = fs.readFileSync('./docs/wxPubAnal.graphql', 'utf8');
@@ -29,6 +28,31 @@ const schema = makeExecutableSchema({
         result = result && result.toObject();
         return result;
       },
+      async postList(parent, { input }, context, info) {
+        const proj = project(info);
+        if (input.count === 0) return null;
+        const query = input.msgBiz ? {
+          msgBiz: { $eq: input.msgBiz },
+        } : {};
+        const result = await Post.find(query,
+          proj,
+          {
+            skip: input.skip || 0,
+            limit: input.count === -1 ? 0 : input.count,
+          });
+        // TODO: sort
+        if (result) {
+          return result.map((r) => r && r.toObject());
+        }
+        return result;
+      },
+      async totalPost(parent, { input }) {
+        const query = input.msgBiz ? {
+          msgBiz: { $eq: input.msgBiz },
+        } : {};
+        const res = await Post.find(query).count();
+        return res;
+      },
       async profileList(parent, { input }, context, info) {
         const proj = project(info);
         if (input.count === 0) return null;
@@ -38,10 +62,15 @@ const schema = makeExecutableSchema({
             skip: input.skip || 0,
             limit: input.count === -1 ? 0 : input.count,
           });
+        // TODO: sort
         if (result) {
           return result.map((r) => r && r.toObject());
         }
         return result;
+      },
+      async totalProfile() {
+        const res = await Profile.find().count();
+        return res;
       },
     },
     Profile: {

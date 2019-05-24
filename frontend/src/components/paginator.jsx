@@ -81,7 +81,7 @@ class Paginator extends React.Component {
     const obj = ob || {};
     return (
       <li className={ classnames({ disabled: obj.disabled, active: obj.active }) } key={Math.random()}>
-        <a href="javascript:void(0)" onClick={ obj.disabled || obj.active ? () => {} : this.loadPage(obj.page) }>
+        <a onClick={ obj.disabled || obj.active ? () => {} : this.loadPage(obj.page) }>
           <span aria-hidden="true">{ obj.name || '' }</span>
         </a>
       </li>

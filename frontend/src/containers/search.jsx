@@ -20,9 +20,9 @@ class Search extends React.Component {
           value={q}
           placeholder={defaultText}
           fullWidth={true}
-          onEnter={(q) => {
-            if (q) nextQuery.q = q;
-            if (!q && nextQuery.q) delete nextQuery.q;
+          onEnter={(qr) => {
+            if (qr) nextQuery.q = qr;
+            if (!qr && nextQuery.q) delete nextQuery.q;
             const path = assembleUrl(pathname, nextQuery);
             history.push(path);
           }}

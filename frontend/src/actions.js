@@ -93,12 +93,10 @@ export function requestProfiles() {
 export const RECEIVE_PROFILES = 'RECEIVE_PROFILES';
 
 export function receiveProfiles(data) {
-  console.log(data);
   return {
     type: RECEIVE_PROFILES,
     profiles: {
       data,
-
     },
   };
 }

@@ -5,11 +5,11 @@ const style = {
   container: {
     position: 'fixed',
     top: '50%',
-    left: '50%'
+    left: '50%',
   },
   refresh: {
     display: 'inline-block',
-    position: 'relative'
+    position: 'relative',
   },
 };
 

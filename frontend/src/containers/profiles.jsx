@@ -1,28 +1,27 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import moment from 'moment';
 import { fetchProfiles } from '../actions';
 import Loading from '../components/loading.jsx';
-import moment from 'moment';
 import Paginator from '../components/paginator.jsx';
-import { Link } from 'react-router-dom';
 import Search from './search.jsx';
 
 class Profiles extends React.Component {
-
   constructor(props) {
     super(props);
     this.returnCurrentSearchArgs = this.returnCurrentSearchArgs.bind(this);
   }
 
   componentDidMount() {
-    let { dispatch, location } = this.props;
+    const { dispatch, location } = this.props;
     dispatch(fetchProfiles(location.query));
   }
 
   // eslint-disable-next-line
   componentWillReceiveProps(nextProps) {
     if (nextProps.location.search !== this.props.location.search) {
-      let { dispatch } = this.props;
+      const { dispatch } = this.props;
       dispatch(fetchProfiles(nextProps.location.query));
     }
   }
@@ -31,19 +30,19 @@ class Profiles extends React.Component {
     const { location } = this.props;
     const { search } = location;
     const searchArgs = {};
-    search.replace('?', '').split('&').forEach(item => {
-      let key = item.split('=')[0];
-      let value = item.replace(`${key}=`, '');
+    search.replace('?', '').split('&').forEach((item) => {
+      const key = item.split('=')[0];
+      const value = item.replace(`${key}=`, '');
       if (key && value) searchArgs[key] = value;
     });
     return searchArgs;
   }
 
   render() {
-    let { isFetching, profiles, history, location } = this.props;
-    let { search, pathname } = location;
+    const { isFetching, profiles, history, location } = this.props;
+    const { search, pathname } = location;
     if (isFetching || !profiles.data) return <Loading />;
-    let metadata = profiles.metadata;
+    const { metadata } = profiles;
     return (
       <div>
         <Search
@@ -94,4 +93,4 @@ class Profiles extends React.Component {
   }
 }
 
-export default connect(state => state)(Profiles);
+export default connect((state) => state)(Profiles);

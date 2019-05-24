@@ -94,8 +94,7 @@ class Posts extends React.Component {
       margin: '10px 15px 10px 0',
     };
     const { metadata } = posts;
-    let count;
-    if (metadata) count = metadata.count;
+    const { count } = metadata || {};
     return (
       <div>
         <Button {...this.judeMainDataShow('all')} onClick={() => {

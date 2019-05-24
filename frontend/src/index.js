@@ -14,8 +14,8 @@ import * as serviceWorker from './serviceWorker';
 
 import reducer from './reducers';
 
-import Posts from './containers/posts.jsx';
-import Profiles from './containers/profiles.jsx';
+import Posts from './containers/posts';
+import Profiles from './containers/profiles';
 
 const ENV = process.env.NODE_ENV || 'development';
 

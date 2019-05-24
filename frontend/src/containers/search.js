@@ -1,6 +1,6 @@
 import React from 'react';
 import { assembleUrl } from '../actions';
-import SearchInput from '../components/searchInput.jsx';
+import SearchInput from '../components/searchInput';
 
 class Search extends React.Component {
   render() {

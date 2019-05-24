@@ -4,9 +4,9 @@ import Button from '@material-ui/core/Button';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { fetchPosts, assembleUrl } from '../actions';
-import Loading from '../components/loading.jsx';
-import Paginator from '../components/paginator.jsx';
-import Search from './search.jsx';
+import Loading from '../components/loading';
+import Paginator from '../components/paginator';
+import Search from './search';
 
 function timeDiff(update, publish) {
   const updateMoment = moment(update);

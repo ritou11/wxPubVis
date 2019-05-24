@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { fetchProfiles } from '../actions';
-import Loading from '../components/loading.jsx';
-import Paginator from '../components/paginator.jsx';
-import Search from './search.jsx';
+import Loading from '../components/loading';
+import Paginator from '../components/paginator';
+import Search from './search';
 
 class Profiles extends React.Component {
   constructor(props) {

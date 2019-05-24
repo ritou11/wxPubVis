@@ -21,7 +21,6 @@ import HSLViolin from './components/HSLViolin';
 import HSLViolinPie from './components/HSLViolinPie';
 import UploadField from './components/UploadField';
 import HSLSettings from './components/HSLSettings';
-import './App.css';
 
 const styles = {
   root: {

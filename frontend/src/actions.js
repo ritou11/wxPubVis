@@ -1,10 +1,6 @@
-import ApolloClient, { gql } from 'apollo-boost';
+import { gql } from 'apollo-boost';
 import { ceil } from 'lodash';
-import config from './config';
-
-const client = new ApolloClient({
-  uri: 'http://localhost/api/graphql',
-});
+import { gqlClient } from './config';
 
 export function assembleUrl(path, params, method) {
   const fparams = params || {};
@@ -59,7 +55,7 @@ export function fetchPosts(query) {
   skip = +(skip > 0) && skip;
   return (dispatch) => {
     dispatch(requestPosts());
-    return client.query({
+    return gqlClient.query({
       query: gql`
         query {
           totalPost( input:{
@@ -99,33 +95,6 @@ export function fetchPosts(query) {
   };
 }
 
-export const REQUEST_POST = 'REQUEST_POST';
-
-export function requestPost(id) {
-  return {
-    type: REQUEST_POST,
-    id,
-  };
-}
-
-export const RECEIVE_POST = 'RECEIVE_POST';
-
-export function receivePost(post) {
-  return {
-    type: RECEIVE_POST,
-    post,
-  };
-}
-
-export function fetchPost(id) {
-  return (dispatch) => {
-    dispatch(requestPost(id));
-    return fetch(`${config.post}/${id}`).then((res) => res.json()).then((post) => {
-      dispatch(receivePost(post));
-    });
-  };
-}
-
 export const REQUEST_PROFILES = 'REQUEST_PROFILES';
 
 export function requestProfiles() {
@@ -156,7 +125,7 @@ export function fetchProfiles(query) {
   skip = +(skip > 0) && skip;
   return (dispatch) => {
     dispatch(requestProfiles());
-    return client.query({
+    return gqlClient.query({
       query: gql`
         query {
           totalProfile
@@ -181,33 +150,6 @@ export function fetchProfiles(query) {
       .then(({ data }) => {
         dispatch(receiveProfiles(data, skip));
       });
-  };
-}
-
-export const REQUEST_PROFILE = 'REQUEST_PROFILE';
-
-export function requestProfile(id) {
-  return {
-    type: REQUEST_PROFILE,
-    id,
-  };
-}
-
-export const RECEIVE_PROFILE = 'RECEIVE_PROFILE';
-
-export function receiveProfile(profile) {
-  return {
-    type: RECEIVE_PROFILE,
-    profile,
-  };
-}
-
-export function fetchProfile(id) {
-  return (dispatch) => {
-    dispatch(requestProfile(id));
-    return fetch(`${config.profile}/${id}`).then((res) => res.json()).then((profile) => {
-      dispatch(receiveProfile(profile));
-    });
   };
 }
 

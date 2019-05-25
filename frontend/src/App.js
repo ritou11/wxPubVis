@@ -32,6 +32,13 @@ const styles = () => ({
   drawerPaper: {
     width: 120,
   },
+  wrapper: {
+    boxSizing: 'border-box',
+    width: '100%',
+    padding: '0 10px',
+    margin: '10px auto',
+    display: 'flex',
+  },
 });
 
 class App extends React.Component {
@@ -63,7 +70,7 @@ class App extends React.Component {
               </ListItem>
             </List>
           </Drawer>
-          <div className="wrapper">
+          <div className={classes.wrapper}>
             {this.props.children}
           </div>
           <Dialog

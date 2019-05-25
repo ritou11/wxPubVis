@@ -1,12 +1,8 @@
 import {
   REQUEST_POSTS,
   RECEIVE_POSTS,
-  REQUEST_POST,
-  RECEIVE_POST,
   REQUEST_PROFILES,
   RECEIVE_PROFILES,
-  REQUEST_PROFILE,
-  RECEIVE_PROFILE,
   SHOW_MESSAGE,
   CLOSE_MESSAGE,
 } from './actions';
@@ -30,9 +26,7 @@ const initialState = {
 function reducer(state = initialState, action) {
   switch (action.type) {
     case REQUEST_POSTS:
-    case REQUEST_POST:
     case REQUEST_PROFILES:
-    case REQUEST_PROFILE:
       return Object.assign({}, state, {
         isFetching: true,
       });
@@ -41,23 +35,11 @@ function reducer(state = initialState, action) {
         isFetching: false,
         posts: action.posts,
       });
-    case RECEIVE_POST:
-      return {
-        ...state,
-        isFetching: false,
-        post: action.post,
-      };
     case RECEIVE_PROFILES:
       return Object.assign({}, state, {
         isFetching: false,
         profiles: action.profiles,
       });
-    case RECEIVE_PROFILE:
-      return {
-        ...state,
-        isFetching: false,
-        profile: action.profile,
-      };
     case SHOW_MESSAGE:
       return {
         ...state,

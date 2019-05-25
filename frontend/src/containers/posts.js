@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+
 import { fetchPosts, assembleUrl } from '../actions';
 import Loading from '../components/loading';
 import Paginator from '../components/paginator';
@@ -19,14 +21,13 @@ function timeDiff(update, publish) {
   return `${years}年`;
 }
 
-class Posts extends React.Component {
-  constructor(props) {
-    super(props);
-    this.sortByTime = this.sortByTime.bind(this);
-    this.judeMainDataShow = this.judeMainDataShow.bind(this);
-    this.returnCurrentSearchArgs = this.returnCurrentSearchArgs.bind(this);
-  }
+const styles = {
+  root: {
+    flex: 1,
+  },
+};
 
+class Posts extends React.Component {
   componentDidMount() {
     const { dispatch, location } = this.props;
     dispatch(fetchPosts(location.query));
@@ -79,7 +80,7 @@ class Posts extends React.Component {
   judeMainDataShow(key) {
     const searchArgs = this.returnCurrentSearchArgs();
     const mainDataVal = searchArgs.mainData;
-    const primary = { primary: 'true' };
+    const primary = { color: 'primary' };
     if (key === 'all' && !mainDataVal) return primary;
     if (key === 'yes' && mainDataVal === 'true') return primary;
     if (key === 'no' && mainDataVal === 'false') return primary;
@@ -91,7 +92,7 @@ class Posts extends React.Component {
     const { pathname } = location;
     const searchArgs = this.returnCurrentSearchArgs();
     const style = {
-      margin: '10px 15px 10px 0',
+      margin: '0px 15px 10px 0',
     };
     const { metadata } = posts;
     const { count } = metadata || {};
@@ -119,7 +120,7 @@ class Posts extends React.Component {
   }
 
   render() {
-    const { isFetching, posts, history, location } = this.props;
+    const { isFetching, posts, history, location, classes } = this.props;
     const { search, pathname } = location;
     if (isFetching || !posts.data) return <Loading />;
     const { metadata, data } = posts;
@@ -153,7 +154,7 @@ class Posts extends React.Component {
     });
 
     return (
-      <div>
+      <div className={classes.root}>
         {this.renderFilter()}
         <Search
           location={location}
@@ -201,4 +202,4 @@ class Posts extends React.Component {
   }
 }
 
-export default connect((state) => state)(Posts);
+export default connect((state) => state)(withStyles(styles)(Posts));

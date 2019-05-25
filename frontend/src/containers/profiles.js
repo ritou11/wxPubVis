@@ -2,10 +2,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import { withStyles } from '@material-ui/core/styles';
+
 import { fetchProfiles } from '../actions';
 import Loading from '../components/loading';
 import Paginator from '../components/paginator';
 import Search from './search';
+
+const styles = {
+  root: {
+    flex: 1,
+  },
+};
 
 class Profiles extends React.Component {
   constructor(props) {
@@ -39,12 +47,12 @@ class Profiles extends React.Component {
   }
 
   render() {
-    const { isFetching, profiles, history, location } = this.props;
+    const { isFetching, profiles, history, location, classes } = this.props;
     const { search, pathname } = location;
     if (isFetching || !profiles.data) return <Loading />;
     const { metadata } = profiles;
     return (
-      <div>
+      <div className={classes.root}>
         <Search
           location={location}
           history={history}
@@ -93,4 +101,4 @@ class Profiles extends React.Component {
   }
 }
 
-export default connect((state) => state)(Profiles);
+export default connect((state) => state)(withStyles(styles)(Profiles));

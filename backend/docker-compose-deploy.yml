@@ -1,0 +1,42 @@
+version: '3'
+services:
+  crawler:
+    image: crawler:latest
+    environment:
+      - DEPLOY=docker
+    expose:
+      - "8101"
+    ports:
+      - 8101:8101
+    depends_on:
+      - redis
+      - mongo
+    networks:
+      - main
+  server:
+    image: server:latest
+    environment:
+      - MONGO_HOST=mongo
+    expose:
+      - "3000"
+    ports:
+      - 80:3000
+    depends_on:
+      - mongo
+    networks:
+      - main
+  redis:
+    image: redis:alpine
+    networks:
+      - main
+  mongo:
+    image: mongo:3.6
+    volumes:
+      - mongodata:/data/db
+    networks:
+      - main
+volumes:
+  mongodata:
+networks:
+  main:
+    driver: bridge

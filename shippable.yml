@@ -1,0 +1,41 @@
+language: node_js
+
+node_js:
+  - 8
+
+branches:
+  only:
+    - deploy
+
+env:
+  global:
+    - DK_REG=registry.cn-hangzhou.aliyuncs.com
+    - DK_C_IMG=$DK_REG/wxpubanal/crawler
+    - DK_S_IMG=$DK_REG/wxpubanal/server
+    - DK_TAG=$BUILD_NUMBER
+    - DK_LATEST_TAG=latest
+
+build:
+  ci:
+    - cd ./backend/crawler/ && shippable_retry yarn
+    # - git describe --always > VERSION
+    # - git rev-parse HEAD > COMMITHASH
+    - docker build -t $DK_C_IMG:$DK_TAG .
+    - cd ../server/ && shippable_retry yarn
+    - docker build -t $DK_S_IMG:$DK_TAG .
+  post_ci:
+    - docker push $DK_C_IMG:$DK_TAG
+    - docker tag $DK_C_IMG:$DK_TAG $DK_C_IMG:$DK_LATEST_TAG
+    - docker push $DK_C_IMG:$DK_LATEST_TAG
+    - docker push $DK_S_IMG:$DK_TAG
+    - docker tag $DK_S_IMG:$DK_TAG $DK_S_IMG:$DK_LATEST_TAG
+    - docker push $DK_S_IMG:$DK_LATEST_TAG
+  cache: true
+  cache_dir_list:
+    - $SHIPPABLE_BUILD_DIR/backend/crawler/node_modules
+    - $SHIPPABLE_BUILD_DIR/backend/server/node_modules
+
+integrations:
+  hub:
+    - integrationName: Aliyun
+      type: dockerRegistryLogin

@@ -1,6 +1,6 @@
 'use strict';
 
-const merge = require('./utils/merge');
+const { merge } = require('lodash');
 
 const config = {
 
@@ -131,7 +131,7 @@ if (process.env.DEPLOY === 'docker') {
 
 // 加载自定义的配置
 try {
-  const myConfig = require('./my_config.json');
+  const myConfig = require('./myConfig.json');
   merge(config, myConfig);
 } catch(e) {
   // console.log(e);

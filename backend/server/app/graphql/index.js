@@ -43,20 +43,11 @@ const schema = makeExecutableSchema({
         }
         let sort;
         if (input.sort) {
-          switch (input.sort) {
-            case 'publishAt':
-              sort = { publishAt: 1 };
-              break;
-            case '-publishAt':
-              sort = { publishAt: -1 };
-              break;
-            case 'updatedAt':
-              sort = { updatedAt: 1 };
-              break;
-            case '-updatedAt':
-            default:
-              sort = { updatedAt: -1 };
-              break;
+          const match = /(-?)(publishAt|updatedAt|likeNum|readNum)/.exec(input.sort);
+          if (match && match.length === 3) {
+            sort = {
+              [match[2]]: match[1] === '-' ? -1 : 1,
+            };
           }
         }
         const result = await Post.find(query,

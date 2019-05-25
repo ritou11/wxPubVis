@@ -52,7 +52,7 @@ class Posts extends React.Component {
     return searchArgs;
   }
 
-  sortByTime(sortType) {
+  sortBy(sortType) {
     const { location, history } = this.props;
     const { search, pathname } = location;
     const searchArgs = this.returnCurrentSearchArgs();
@@ -166,12 +166,12 @@ class Posts extends React.Component {
           <thead>
             <tr>
               <th>ID</th>
-              <th>发布时间 {this.sortByTime('publishAt')}</th>
+              <th>发布时间 {this.sortBy('publishAt')}</th>
               <th>文章标题</th>
               <th>位置</th>
-              <th>阅读数</th>
-              <th>点赞数</th>
-              <th>更新时间 {this.sortByTime('updatedAt')}</th>
+              <th>阅读数 {this.sortBy('readNum')}</th>
+              <th>点赞数 {this.sortBy('likeNum')}</th>
+              <th>更新时间 {this.sortBy('updatedAt')}</th>
               <th>间隔</th>
               <th>公众号</th>
               <th>详情</th>

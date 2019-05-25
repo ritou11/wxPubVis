@@ -12,6 +12,7 @@
 ## Project
 * frontend/，前端代码，负责展示可视化效果、绘制可视化图形。
 * backend/，后端代码，负责处理公众号数据。
-* backend/crawler，后端爬虫代码，负责爬取公众号数据
+* backend/crawler，后端爬虫代码，负责爬取公众号数据。
+* backend/server，后端接口，基于GraphQL。
 ## License
 MIT

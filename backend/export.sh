@@ -1,6 +1,7 @@
 #!/bin/bash
 cd backup
 BACKUPPATH=$(pwd)
+# remote: BACKUPPATH='/root/backup'
 cd ..
 collections=(
   posts

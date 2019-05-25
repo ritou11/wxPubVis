@@ -65,6 +65,7 @@ export function fetchPosts(query) {
           totalPost( input:{
             ${query.msgBiz ? `msgBiz:"${query.msgBiz}"` : ''}
             ${query.mainData ? `hasData:${query.mainData}` : ''}
+            ${query.q ? `search:"${query.q}"` : ''}
           } )
           postList(
             input:{
@@ -72,6 +73,7 @@ export function fetchPosts(query) {
               skip:${skip}
               count:${query.perPage || 20}
               ${query.mainData ? `hasData:${query.mainData}` : ''}
+              ${query.q ? `search:"${query.q}"` : ''}
             }
           ) {
               pId

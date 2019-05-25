@@ -6,19 +6,12 @@ type Query {
   postList(input: PostListInput!): [Post!]
   totalPost(input: PostCountInput!): Int
   profileList(input: ProfileListInput!): [Profile!]
-  totalProfile: Int
+  totalProfile(input: ProfileCountInput): Int
   postVis(input: PostVisInput!): PostVis
   profileVis(input: ProfileVisInput!): ProfileVis
-  searchPost(input: SearchInput!): [Post!]
-  searchProfile(input: SearchInput!): [Profile!]
 }
 
 # Inputs
-input SearchInput {
-  sId: ID
-  name: String
-}
-
 input PostInput {
   pId: ID!
 }
@@ -33,17 +26,24 @@ input PostListInput {
   count: Int
   sort: String
   hasData: Boolean
+  search: String
 }
 
 input PostCountInput {
   msgBiz: ID
   hasData: Boolean
+  search: String
 }
 
 input ProfileListInput {
   skip: Int
   count: Int
   sort: String
+  search: String
+}
+
+input ProfileCountInput {
+  search: String
 }
 
 input PostVisInput {

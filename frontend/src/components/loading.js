@@ -1,7 +1,8 @@
 import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { withStyles } from '@material-ui/core/styles';
 
-const style = {
+const styles = {
   container: {
     position: 'fixed',
     top: '50%',
@@ -13,16 +14,21 @@ const style = {
   },
 };
 
-const Loading = () => (
-  <div style={style.container}>
-    <CircularProgress
-      size={50}
-      left={-25}
-      top={-25}
-      status="loading"
-      style={style.refresh}
-    />
-  </div>
-);
+class Loading extends React.Component {
+  render() {
+    const { classes } = this.props;
+    return (
+      <div className={classes.container}>
+        <CircularProgress
+          size={50}
+          left={-25}
+          top={-25}
+          status="loading"
+          className={classes.refresh}
+        />
+      </div>
+    );
+  }
+}
 
-export default Loading;
+export default withStyles(styles)(Loading);

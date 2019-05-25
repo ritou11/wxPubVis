@@ -11,6 +11,7 @@ import { Query, ApolloProvider } from 'react-apollo';
 import { gql } from 'apollo-boost';
 import { gqlClient } from '../config';
 
+import Loading from '../components/loading';
 import VisReadnumLine from '../components/visReadnumLine';
 
 const styles = {
@@ -51,7 +52,7 @@ class Vis extends Component {
             `}
           >
             {({ loading, error, data }) => {
-              if (loading) return <p>Loading...</p>;
+              if (loading) return <Loading />;
               if (error) return <p>Error :(</p>;
               const nestedData = sortBy(
                 filter(map(data.postList, (d) => {
@@ -99,7 +100,7 @@ class Vis extends Component {
               {({ loading, error, data }) => (
                 <List>
                   {(() => {
-                    if (loading) return <ListItem>Loading...</ListItem>;
+                    if (loading) return <Loading />;
                     if (error) return <ListItem>Error :(</ListItem>;
                     return map(data.profileList, (d) => (
                       <ListItem button

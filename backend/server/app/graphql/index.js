@@ -38,6 +38,9 @@ const schema = makeExecutableSchema({
         if (input.hasData !== undefined) {
           query.readNum = { $exists: input.hasData };
         }
+        if (input.search) {
+          query.title = { $regex: `.*${input.search}.*` };
+        }
         const result = await Post.find(query,
           proj,
           {
@@ -58,13 +61,20 @@ const schema = makeExecutableSchema({
         if (input.hasData !== undefined) {
           query.readNum = { $exists: input.hasData };
         }
+        if (input.search) {
+          query.title = { $regex: `.*${input.search}.*` };
+        }
         const res = await Post.find(query).count();
         return res;
       },
       async profileList(parent, { input }, context, info) {
         const proj = project(info);
         if (input.count === 0) return null;
-        const result = await Profile.find({},
+        const query = {};
+        if (input.search) {
+          query.title = { $regex: `.*${input.search}.*` };
+        }
+        const result = await Profile.find(query,
           proj,
           {
             skip: input.skip || 0,
@@ -76,8 +86,12 @@ const schema = makeExecutableSchema({
         }
         return result;
       },
-      async totalProfile() {
-        const res = await Profile.find().count();
+      async totalProfile(parent, { input }) {
+        const query = {};
+        if (input && input.search) {
+          query.title = { $regex: `.*${input.search}.*` };
+        }
+        const res = await Profile.find(query).count();
         return res;
       },
     },

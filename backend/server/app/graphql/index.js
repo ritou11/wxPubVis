@@ -41,13 +41,31 @@ const schema = makeExecutableSchema({
         if (input.search) {
           query.title = { $regex: `.*${input.search}.*` };
         }
+        let sort;
+        if (input.sort) {
+          switch (input.sort) {
+            case 'publishAt':
+              sort = { publishAt: 1 };
+              break;
+            case '-publishAt':
+              sort = { publishAt: -1 };
+              break;
+            case 'updatedAt':
+              sort = { updatedAt: 1 };
+              break;
+            case '-updatedAt':
+            default:
+              sort = { updatedAt: -1 };
+              break;
+          }
+        }
         const result = await Post.find(query,
           proj,
           {
             skip: input.skip || 0,
             limit: input.count === -1 ? 0 : (input.count || 20),
+            sort,
           });
-        // TODO: sort
         if (result) {
           return result.map((r) => r && r.toObject());
         }

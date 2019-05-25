@@ -70,6 +70,7 @@ export function fetchPosts(query) {
               count:${query.perPage || 20}
               ${query.mainData ? `hasData:${query.mainData}` : ''}
               ${query.q ? `search:"${query.q}"` : ''}
+              ${query.sortWay ? `sort:"${query.sortWay}"` : ''}
             }
           ) {
               pId

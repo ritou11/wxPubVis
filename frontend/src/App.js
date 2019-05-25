@@ -6,6 +6,8 @@ import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import { Home, Bookmark } from '@material-ui/icons';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.min.css';
@@ -26,11 +28,11 @@ const styles = () => ({
     flexDirection: 'row',
   },
   drawer: {
-    width: 120,
+    width: 180,
     flexShrink: 0,
   },
   drawerPaper: {
-    width: 120,
+    width: 180,
   },
   wrapper: {
     boxSizing: 'border-box',
@@ -38,6 +40,9 @@ const styles = () => ({
     padding: '0 10px',
     margin: '10px auto',
     display: 'flex',
+  },
+  listitemicon: {
+    margin: 'auto',
   },
 });
 
@@ -54,18 +59,23 @@ class App extends React.Component {
             variant={'persistent'}>
             <List>
               <ListItem button onClick={() => { history.push('/'); }}>
+                <ListItemIcon className={classes.listitemicon}><Home/></ListItemIcon>
                 <ListItemText primary="首页" />
               </ListItem>
               <ListItem button onClick={() => { history.push('/posts'); }}>
+                <ListItemIcon className={classes.listitemicon}><Bookmark/></ListItemIcon>
                 <ListItemText primary="推送数据" />
               </ListItem>
               <ListItem button onClick={() => { history.push('/profiles'); }}>
+                <ListItemIcon className={classes.listitemicon}><Bookmark/></ListItemIcon>
                 <ListItemText primary="公众号数据" />
               </ListItem>
               <ListItem button onClick={() => { history.push('/colorana'); }}>
+                <ListItemIcon className={classes.listitemicon}><Bookmark/></ListItemIcon>
                 <ListItemText primary="D3实例" />
               </ListItem>
               <ListItem button onClick={() => { history.push('/vis'); }}>
+                <ListItemIcon className={classes.listitemicon}><Bookmark/></ListItemIcon>
                 <ListItemText primary="公众号可视化" />
               </ListItem>
             </List>

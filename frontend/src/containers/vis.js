@@ -69,7 +69,7 @@ class Vis extends Component {
               return (
                 <VisReadnumLine
                   height={500}
-                  width={1000}
+                  width={900}
                   title={this.state.title}
                   data={nestedData}
                 />

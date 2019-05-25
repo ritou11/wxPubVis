@@ -8,17 +8,11 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 
 import { Query, ApolloProvider } from 'react-apollo';
-import { ApolloClient, gql } from 'apollo-boost';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { HttpLink } from 'apollo-link-http';
+import { gql } from 'apollo-boost';
+import { gqlClient } from '../config';
 
 import VisReadnumLine from '../components/visReadnumLine';
 
-const cache = new InMemoryCache();
-const link = new HttpLink({
-  uri: 'http://localhost/api/graphql',
-});
-const client = new ApolloClient({ cache, link });
 const styles = {
   drawer: {
     width: 240,
@@ -38,7 +32,7 @@ class Vis extends Component {
     const { classes } = this.props;
     return (
       <div>
-        <ApolloProvider client={client}>
+        <ApolloProvider client={gqlClient}>
           <Query
             query={gql`
               {

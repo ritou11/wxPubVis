@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const mongoose = require('mongoose');
 const logger = require('./logger')('mongo');
 

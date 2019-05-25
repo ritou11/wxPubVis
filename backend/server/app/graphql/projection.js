@@ -4,6 +4,7 @@ module.exports = gqlProjection({
   Post: {
     proj: {
       pId: '_id',
+      profile: 'msgBiz',
     },
   },
   Profile: {

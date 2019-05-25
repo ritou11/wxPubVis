@@ -38,7 +38,7 @@ const schema = makeExecutableSchema({
           proj,
           {
             skip: input.skip || 0,
-            limit: input.count === -1 ? 0 : input.count,
+            limit: input.count === -1 ? 0 : (input.count || 20),
           });
         // TODO: sort
         if (result) {
@@ -71,6 +71,16 @@ const schema = makeExecutableSchema({
       async totalProfile() {
         const res = await Profile.find().count();
         return res;
+      },
+    },
+    Post: {
+      async profile(parent, args, context, info) {
+        const proj = project(info);
+        let result = await Profile.findOne({
+          msgBiz: parent.msgBiz,
+        }, proj);
+        result = result && result.toObject();
+        return result;
       },
     },
     Profile: {

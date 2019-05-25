@@ -130,7 +130,7 @@ class Posts extends React.Component {
       if (i.link) {
         showTitle = <a title={i.title} href={i.link} rel="noopener noreferrer" target="_blank">{showTitle}</a>;
       } else {
-        showTitle = <a title={i.title}>{showTitle}</a>;
+        showTitle = <span>{showTitle}</span>;
       }
       return {
         pId: i.pId,
@@ -145,6 +145,7 @@ class Posts extends React.Component {
           {i.profile ? (<span>
             <img style={{ height: '24px', marginRight: '3px' }}
               src={i.profile.headimg}
+              alt={`${i.profile.title}.headimg`}
               className="img-circle" />
             {i.profile.title}
           </span>) : i.msgBiz}</Link>,

@@ -42,7 +42,7 @@ PostSchema.virtual('profile', {
   ref: 'Profile',
   localField: 'msgBiz',
   foreignField: 'msgBiz',
-  justOne: true
+  justOne: true,
 });
 
 // 索引

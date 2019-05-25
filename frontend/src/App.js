@@ -5,6 +5,8 @@ import { MuiThemeProvider, createMuiTheme, withStyles } from '@material-ui/core/
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+
 import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.min.css';
 import './App.css';
@@ -24,11 +26,11 @@ const styles = () => ({
     flexDirection: 'row',
   },
   drawer: {
-    width: 100,
+    width: 120,
     flexShrink: 0,
   },
   drawerPaper: {
-    width: 100,
+    width: 120,
   },
 });
 
@@ -44,11 +46,21 @@ class App extends React.Component {
             open={true}
             variant={'persistent'}>
             <List>
-              <ListItem button onClick={() => { history.push('/'); }}> 首页 </ListItem>
-              <ListItem button onClick={() => { history.push('/posts'); }}> 文章 </ListItem>
-              <ListItem button onClick={() => { history.push('/profiles'); }}> 公众号 </ListItem>
-              <ListItem button onClick={() => { history.push('/colorana'); }}> D3实例 </ListItem>
-              <ListItem button onClick={() => { history.push('/vis'); }}> 可视化 </ListItem>
+              <ListItem button onClick={() => { history.push('/'); }}>
+                <ListItemText primary="首页" />
+              </ListItem>
+              <ListItem button onClick={() => { history.push('/posts'); }}>
+                <ListItemText primary="推送数据" />
+              </ListItem>
+              <ListItem button onClick={() => { history.push('/profiles'); }}>
+                <ListItemText primary="公众号数据" />
+              </ListItem>
+              <ListItem button onClick={() => { history.push('/colorana'); }}>
+                <ListItemText primary="D3实例" />
+              </ListItem>
+              <ListItem button onClick={() => { history.push('/vis'); }}>
+                <ListItemText primary="公众号可视化" />
+              </ListItem>
             </List>
           </Drawer>
           <div className="wrapper">

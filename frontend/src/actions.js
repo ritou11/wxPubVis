@@ -70,16 +70,20 @@ export function fetchPosts(query) {
               count:${query.perPage || 20}
             }
           ) {
-            pId
-            title
-            msgBiz
-            msgIdx
-            msgMid
-            publishAt
-            updatedAt
-            likeNum
-            readNum
-            link
+              pId
+              title
+              msgBiz
+              msgIdx
+              msgMid
+              publishAt
+              updatedAt
+              likeNum
+              readNum
+              link
+              profile {
+                title
+                headimg
+              }
             }
           }`,
     })

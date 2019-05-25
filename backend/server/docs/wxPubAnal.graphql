@@ -72,6 +72,7 @@ type Post {
   likeNum: Int
   readNum: Int
   link: String
+  profile: Profile
 }
 
 type Profile {

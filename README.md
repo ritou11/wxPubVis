@@ -1,4 +1,7 @@
 # wxPubAnal
+[![Netlify Status](https://api.netlify.com/api/v1/badges/f291ad32-f297-4a0a-856c-9bf902873dd1/deploy-status)](https://app.netlify.com/sites/vibrant-ramanujan-de9556/deploys)
+[![Run Status](https://api.shippable.com/projects/5ce95fe1daf54c0007e97a4b/badge?branch=deploy)](https://app.shippable.com/github/ritou11/wxPubAnal/dashboard)
+
 > Analyze wechat public accounts.
 ## Description
 清华大学2019春季学期数据可视化课程大作业。成员名单：

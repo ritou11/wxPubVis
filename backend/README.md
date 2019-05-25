@@ -1,4 +1,6 @@
 # wxPubAnal/backend
+[![Run Status](https://api.shippable.com/projects/5ce95fe1daf54c0007e97a4b/badge?branch=deploy)](https://app.shippable.com/github/ritou11/wxPubAnal/dashboard)
+
 > The backend of the project. The structure is copied from [colorana](https://github.com/ritou11/colorana).
 
 ## Structure

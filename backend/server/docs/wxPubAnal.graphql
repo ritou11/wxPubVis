@@ -32,10 +32,12 @@ input PostListInput {
   skip: Int
   count: Int
   sort: String
+  hasData: Boolean
 }
 
 input PostCountInput {
   msgBiz: ID
+  hasData: Boolean
 }
 
 input ProfileListInput {

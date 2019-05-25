@@ -126,7 +126,7 @@ class Posts extends React.Component {
 
     // show
     const showData = data.map((i) => {
-      let showTitle = i.title.substr(0, 25) || '暂无';
+      let showTitle = (i.title && i.title.substr(0, 25)) || '暂无';
       if (i.link) {
         showTitle = <a title={i.title} href={i.link} rel="noopener noreferrer" target="_blank">{showTitle}</a>;
       } else {

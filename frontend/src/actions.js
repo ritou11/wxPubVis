@@ -62,12 +62,16 @@ export function fetchPosts(query) {
     return client.query({
       query: gql`
         query {
-          totalPost( input:{${query.msgBiz ? `msgBiz:"${query.msgBiz}"` : ''}} )
+          totalPost( input:{
+            ${query.msgBiz ? `msgBiz:"${query.msgBiz}"` : ''}
+            ${query.mainData ? `hasData:${query.mainData}` : ''}
+          } )
           postList(
             input:{
               ${query.msgBiz ? `msgBiz:"${query.msgBiz}"` : ''}
               skip:${skip}
               count:${query.perPage || 20}
+              ${query.mainData ? `hasData:${query.mainData}` : ''}
             }
           ) {
               pId

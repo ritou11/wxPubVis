@@ -31,9 +31,13 @@ const schema = makeExecutableSchema({
       async postList(parent, { input }, context, info) {
         const proj = project(info);
         if (input.count === 0) return null;
-        const query = input.msgBiz ? {
-          msgBiz: { $eq: input.msgBiz },
-        } : {};
+        const query = {};
+        if (input.msgBiz) {
+          query.msgBiz = { $eq: input.msgBiz };
+        }
+        if (input.hasData !== undefined) {
+          query.readNum = { $exists: input.hasData };
+        }
         const result = await Post.find(query,
           proj,
           {
@@ -47,9 +51,13 @@ const schema = makeExecutableSchema({
         return result;
       },
       async totalPost(parent, { input }) {
-        const query = input.msgBiz ? {
-          msgBiz: { $eq: input.msgBiz },
-        } : {};
+        const query = {};
+        if (input.msgBiz) {
+          query.msgBiz = { $eq: input.msgBiz };
+        }
+        if (input.hasData !== undefined) {
+          query.readNum = { $exists: input.hasData };
+        }
         const res = await Post.find(query).count();
         return res;
       },

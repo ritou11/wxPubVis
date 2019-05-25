@@ -20,11 +20,6 @@ const link = new HttpLink({
 });
 const client = new ApolloClient({ cache, link });
 const styles = {
-  root: {
-    display: 'flex',
-    width: '100%',
-    flexDirection: 'column',
-  },
   drawer: {
     width: 240,
     flexShrink: 0,

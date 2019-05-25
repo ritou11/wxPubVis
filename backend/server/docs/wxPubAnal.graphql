@@ -1,14 +1,14 @@
 # Entry points
 
 type Query {
-  post(input: PInput!): Post
-  profile(input: PInput!): Profile
+  post(input: PostInput!): Post
+  profile(input: ProfileInput!): Profile
   postList(input: PostListInput!): [Post!]
   totalPost(input: PostCountInput!): Int
   profileList(input: ProfileListInput!): [Profile!]
   totalProfile: Int
-  postVis(input: PVisInput!): PostVis
-  profileVis(input: PVisInput!): ProfileVis
+  postVis(input: PostVisInput!): PostVis
+  profileVis(input: ProfileVisInput!): ProfileVis
   searchPost(input: SearchInput!): [Post!]
   searchProfile(input: SearchInput!): [Profile!]
 }
@@ -19,8 +19,12 @@ input SearchInput {
   name: String
 }
 
-input PInput {
-  pId: ID
+input PostInput {
+  pId: ID!
+}
+
+input ProfileInput {
+  msgBiz: ID!
 }
 
 input PostListInput {
@@ -40,8 +44,13 @@ input ProfileListInput {
   sort: String
 }
 
-input PVisInput {
+input PostVisInput {
   pId: ID!
+  vis: String!
+}
+
+input ProfileVisInput {
+  msgBiz: ID!
   vis: String!
 }
 

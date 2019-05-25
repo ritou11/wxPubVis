@@ -23,7 +23,7 @@ const schema = makeExecutableSchema({
       async profile(parent, { input }, context, info) {
         const proj = project(info);
         let result = await Profile.findOne({
-          _id: input.pId,
+          msgBiz: input.msgBiz,
         }, proj);
         result = result && result.toObject();
         return result;

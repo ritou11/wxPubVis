@@ -18,6 +18,11 @@ const theme = createMuiTheme({
 });
 
 const styles = () => ({
+  root: {
+    display: 'flex',
+    width: '100%',
+    flexDirection: 'row',
+  },
   drawer: {
     width: 100,
     flexShrink: 0,
@@ -33,7 +38,7 @@ class App extends React.Component {
     const { classes } = this.props;
     return (
       <MuiThemeProvider theme={theme}>
-        <div>
+        <div className={classes.root}>
           <Drawer className={classes.drawer}
             classes={{ paper: classes.drawerPaper }}
             open={true}

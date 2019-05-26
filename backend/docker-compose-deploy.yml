@@ -1,5 +1,21 @@
 version: '3'
 services:
+  letsencrypt:
+    image: linuxserver/letsencrypt
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /root/letsencrypt:/config
+      # absolute path
+    environment:
+      - EMAIL=ritou11@gmail.com
+      - URL=nogeek.top
+      - SUBDOMAINS=wxpub
+      - VALIDATION=http
+      - TZ=China/Shanghai
+      - PUID=0
+      - PGID=0
   crawler:
     image: registry.cn-hangzhou.aliyuncs.com/wxpubanal/crawler:latest
     environment:
@@ -19,8 +35,6 @@ services:
       - MONGO_HOST=mongo
     expose:
       - "3000"
-    ports:
-      - 80:3000
     depends_on:
       - mongo
     networks:

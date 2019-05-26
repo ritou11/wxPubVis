@@ -1,0 +1,23 @@
+2019.05.26
+
+图1 单篇推送
+【词云】
+m个主题（m<=5），每个主题前n个词（n<=30)
+[{
+theme: “主题1”,
+words: [{name:”xxx”, freq:123}],
+weight
+}], title
+【相似列表】
+[{
+pId,
+similarity
+}]
+图2 公众号
+【主题流】
+profile: [{
+theme: “”,
+weight: 10,
+}]
+weight = t/Sum(t) * Readnum
+post: [{theme:””, weight: 10, contrib: 10000}]（长度5以内）

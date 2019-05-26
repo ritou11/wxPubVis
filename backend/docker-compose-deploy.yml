@@ -34,10 +34,9 @@ services:
     image: registry.cn-hangzhou.aliyuncs.com/wxpubanal/server:latest
     environment:
       - MONGO_HOST=mongo
+      - CORS_ORIGIN=https://wxpub.nogeek.top
     expose:
       - "3000"
-    ports:
-      - 3000:3000
     depends_on:
       - mongo
     networks:

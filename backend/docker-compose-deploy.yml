@@ -10,12 +10,13 @@ services:
       # absolute path
     environment:
       - EMAIL=ritou11@gmail.com
-      - URL=nogeek.top
-      - SUBDOMAINS=wxpub
+      - URL=wxpub-api.nogeek.top
       - VALIDATION=http
-      - TZ=China/Shanghai
-      - PUID=0
-      - PGID=0
+      - TZ=Europe/Stockholm
+      - PUID=1000
+      - PGID=1000
+    networks:
+      - main
   crawler:
     image: registry.cn-hangzhou.aliyuncs.com/wxpubanal/crawler:latest
     environment:
@@ -35,6 +36,8 @@ services:
       - MONGO_HOST=mongo
     expose:
       - "3000"
+    ports:
+      - 3000:3000
     depends_on:
       - mongo
     networks:

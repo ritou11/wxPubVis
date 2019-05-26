@@ -25,6 +25,9 @@ services:
       - "8101"
     ports:
       - 8101:8101
+    volumes:
+      - /root/myConfig.json:/app/myConfig.json
+      # absolute path
     depends_on:
       - redis
       - mongo

@@ -83,6 +83,7 @@ export function fetchPosts(query) {
               likeNum
               readNum
               link
+              senti
               profile {
                 title
                 headimg

@@ -24,6 +24,14 @@ const styles = {
   },
 };
 
+const colormap = (n) => {
+  let b;
+  if (!n) return 'hsl(0,0%,80%)';
+  if (n < 0.5) b = 0;
+  else b = (n - 0.5) * 2;
+  return `hsl(0,${b * 100}%,${50 * b}%)`;
+};
+
 class Vis extends Component {
   state = {
     msgBiz: '',
@@ -47,6 +55,7 @@ class Vis extends Component {
                   title
                   publishAt
                   readNum
+                  senti
                   }
               }
             `}
@@ -61,6 +70,7 @@ class Vis extends Component {
                       x: new Date(d.publishAt),
                       y: d.readNum - 1,
                       name: d.title,
+                      color: colormap(d.senti),
                     });
                   }
                   return null;

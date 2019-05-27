@@ -75,6 +75,7 @@ type Post {
   readNum: Int
   link: String
   profile: Profile
+  senti: Float
 }
 
 type Profile {

@@ -33,7 +33,7 @@ export default class VisReadnumLine extends React.Component {
           plotOptions: {
             scatter: {
               marker: {
-                radius: 2,
+                radius: 3,
               },
             },
           },

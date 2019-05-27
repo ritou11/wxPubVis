@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import { round } from 'lodash';
 
 import { fetchPosts, assembleUrl } from '../actions';
 import Loading from '../components/loading';
@@ -150,6 +151,7 @@ class Posts extends React.Component {
               className="img-circle" />
             {i.profile.title}
           </span>) : i.msgBiz}</Link>,
+        senti: round(i.senti, 2),
       };
     });
 
@@ -174,7 +176,7 @@ class Posts extends React.Component {
               <th>更新时间 {this.sortBy('updatedAt')}</th>
               <th>间隔</th>
               <th>公众号</th>
-              <th>详情</th>
+              <th>评论</th>
             </tr>
           </thead>
           <tbody>
@@ -190,7 +192,7 @@ class Posts extends React.Component {
                   <td>{i.updatedAt}</td>
                   <td>{i.updateInterval}</td>
                   <td>{i.showProfile}</td>
-                  <td><Link to={`/posts/${i.id}`}>详情</Link></td>
+                  <td>{i.senti}</td>
                 </tr>
               ))
             }

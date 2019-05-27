@@ -5,6 +5,7 @@ module.exports = gqlProjection({
     proj: {
       pId: '_id',
       profile: 'msgBiz',
+      senti: 'comSenti',
     },
   },
   Profile: {

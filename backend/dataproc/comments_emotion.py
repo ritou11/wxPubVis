@@ -1,3 +1,6 @@
+# 计算每个评论的情感
+# 输入：评论content
+# 输出：评论情感senti，取值0-1，表示"该评论为积极"的置信度
 from snownlp import SnowNLP
 from pymongo import MongoClient
 

@@ -88,6 +88,12 @@ type Profile {
   postsDataCount: Int
   createdAt: String # TODO: time
   updatedAt: String # TODO: time
+  activity: [ActivityDay!]
+}
+
+type ActivityDay {
+  publishAt: String
+  score: Float
 }
 
 type PostVis {

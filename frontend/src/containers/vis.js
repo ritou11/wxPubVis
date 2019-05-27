@@ -13,6 +13,7 @@ import { gqlClient } from '../config';
 
 import Loading from '../components/loading';
 import VisReadnumLine from '../components/visReadnumLine';
+import VisActivityLine from '../components/visActivityLine';
 
 const styles = {
   drawer: {
@@ -78,6 +79,45 @@ class Vis extends Component {
               );
               return (
                 <VisReadnumLine
+                  height={500}
+                  width={900}
+                  title={this.state.title}
+                  data={nestedData}
+                />
+              );
+            }}
+          </Query>
+          <Query
+            query={gql`
+              {
+                profile(input: {
+                  msgBiz:"${this.state.msgBiz}"
+                }) {
+                  title
+                  activity {
+                    publishAt
+                    score
+                  }
+                }
+              }
+            `}
+          >
+            {({ loading, error, data }) => {
+              if (loading) return <Loading />;
+              if (error) return <p>Error :(</p>;
+              const nestedData = data.profile && sortBy(
+                filter(map(data.profile.activity, (d) => {
+                  if (d.publishAt && d.score) {
+                    return ({
+                      x: new Date(d.publishAt),
+                      y: d.score,
+                    });
+                  }
+                  return null;
+                })), (d) => d.x,
+              );
+              return (
+                <VisActivityLine
                   height={500}
                   width={900}
                   title={this.state.title}

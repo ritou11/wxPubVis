@@ -1,6 +1,6 @@
-# 计算每个评论的情感
-# 输入：评论content
-# 输出：评论情感senti，取值0-1，表示"该评论为积极"的置信度
+# 计算每每篇推送的评论情感
+# 输入：对应评论的senti
+# 输出：推送评论情感comSenti
 from snownlp import SnowNLP
 from pymongo import MongoClient
 
@@ -10,7 +10,6 @@ pstcol = db.posts
 cmtcol = db.comments
 
 projection = {'_id': 1}
-
 cursor = pstcol.find(projection=projection, no_cursor_timeout=True)
 for i, doc in enumerate(cursor):
     if (i % 10 == 0):

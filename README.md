@@ -1,6 +1,6 @@
-# [wxPubAnal](https://wxpub.nogeek.top/)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/f291ad32-f297-4a0a-856c-9bf902873dd1/deploy-status)](https://app.netlify.com/sites/vibrant-ramanujan-de9556/deploys)
-[![Run Status](https://api.shippable.com/projects/5ce95fe1daf54c0007e97a4b/badge?branch=deploy)](https://app.shippable.com/github/ritou11/wxPubAnal/dashboard)
+# wxPubAnal
+[![Netlify Status](https://api.netlify.com/api/v1/badges/c6b40c45-0f0f-4ba7-b6c5-ca303e102760/deploy-status)](https://app.netlify.com/sites/optimistic-lewin-b175d0/deploys)
+[![Run Status](https://api.shippable.com/projects/5ce95fe1daf54c0007e97a4b/badge?branch=deploy)](https://app.shippable.com/github/ritou11/wxPubVis/dashboard)
 
 > Analyze wechat public accounts.
 ## Description

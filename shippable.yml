@@ -10,8 +10,8 @@ branches:
 env:
   global:
     - DK_REG=registry.cn-hangzhou.aliyuncs.com
-    - DK_C_IMG=$DK_REG/wxpubanal/crawler
-    - DK_S_IMG=$DK_REG/wxpubanal/server
+    - DK_C_IMG=$DK_REG/wxpubvis/crawler
+    - DK_S_IMG=$DK_REG/wxpubvis/server
     - DK_TAG=$BUILD_NUMBER
     - DK_LATEST_TAG=latest
 

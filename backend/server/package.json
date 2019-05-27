@@ -1,8 +1,8 @@
 {
-  "name": "wxPubAnal-backend-server",
+  "name": "wxPubVis-backend-server",
   "version": "1.0.0",
-  "description": "Server of wxPubAnal backend",
-  "repository": "https://github.com/ritou11/wxPubAnal/tree/master/backend",
+  "description": "Server of wxPubVis backend",
+  "repository": "https://github.com/ritou11/wxPubVis/tree/master/backend",
   "engines": {
     "npm": ">=5.5.1",
     "node": ">=8.9.3",

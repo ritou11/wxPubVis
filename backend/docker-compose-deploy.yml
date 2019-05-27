@@ -18,7 +18,7 @@ services:
     networks:
       - main
   crawler:
-    image: registry.cn-hangzhou.aliyuncs.com/wxpubanal/crawler:latest
+    image: registry.cn-hangzhou.aliyuncs.com/wxpubvis/crawler:latest
     environment:
       - DEPLOY=docker
     expose:
@@ -31,7 +31,7 @@ services:
     networks:
       - main
   server:
-    image: registry.cn-hangzhou.aliyuncs.com/wxpubanal/server:latest
+    image: registry.cn-hangzhou.aliyuncs.com/wxpubvis/server:latest
     environment:
       - MONGO_HOST=mongo
     expose:

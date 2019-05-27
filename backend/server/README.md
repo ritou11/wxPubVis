@@ -1,2 +1,2 @@
-# wxPubAnal/backend/server
-> The server of wxPubAnal backend. 
+# wxPubVis/backend/server
+> The server of wxPubVis backend.

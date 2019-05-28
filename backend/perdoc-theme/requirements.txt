@@ -1,0 +1,6 @@
+gensim
+pprint
+jieba
+numpy
+pandas
+pymongo

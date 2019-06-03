@@ -5,6 +5,7 @@ const fs = require('fs');
 const { Post } = require('../../models/post');
 const { Profile } = require('../../models/profile');
 const { Perdoc } = require('../../models/perdoc');
+const { Perpub } = require('../../models/perpub');
 const { project, resolvers } = require('./projection');
 
 const typeDefs = fs.readFileSync('./docs/wxPubAnal.graphql', 'utf8');
@@ -112,6 +113,14 @@ const schema = makeExecutableSchema({
         result = result && result.toObject();
         return result;
       },
+      async profileThemes(parent, { input }, context, info) {
+        const proj = project(info);
+        let result = await Perpub.findOne({
+          msgBiz: input.msgBiz,
+        }, proj);
+        result = result && result.toObject();
+        return result;
+      },
     },
     Post: {
       async profile(parent, args, context, info) {
@@ -136,6 +145,16 @@ const schema = makeExecutableSchema({
           readNum: { $exists: true },
         }).count();
         return res;
+      },
+    },
+    RelatedArticle: {
+      async info(parent, args, context, info) {
+        const proj = project(info);
+        let result = await Post.findOne({
+          _id: parent.pId,
+        }, proj);
+        result = result && result.toObject();
+        return result;
       },
     },
   }),

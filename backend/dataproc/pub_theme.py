@@ -209,7 +209,7 @@ for num, pn in enumerate(prfcursor):
                     for i in lda.components_[idx].argsort()[:-n_top_words - 1:-1]]
         top_dict['themes'].append({
             'name': f'主题{idx + 1}',
-            'importance': str(sum_contrib),
+            'importance': sum_contrib.item(),
             'keywords': keywords
         })
     print(top_dict)

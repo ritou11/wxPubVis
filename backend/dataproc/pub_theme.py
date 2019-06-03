@@ -121,6 +121,10 @@ for num, pn in enumerate(prfcursor):
             pickle.dump(df, f)
         print('Done jieba!')
 
+    print(f'{len(df)} posts in the profile.')
+    if len(df) <= 1:
+        continue
+
     n_features = 1000
     n_topics = 30
     n_top_words = 50
@@ -154,9 +158,6 @@ for num, pn in enumerate(prfcursor):
 
     tf_feature_names = tf_vectorizer.get_feature_names()
 
-    print("主题-相关词")
-    print_top_words(lda, tf_feature_names, n_top_words)
-
     print("文章-主题权重")
     docresName = f'{pn["msgBiz"]}-docres.lda'
     if os.path.exists(docresName):
@@ -176,7 +177,7 @@ for num, pn in enumerate(prfcursor):
     readnum = readnum.repeat(30, axis=1)
     readnum = readnum.astype(np.float)
     contrib = np.multiply(docres, readnum)
-    print(contrib)
+
     for idx in range(0, len(df)):
         post_dict = dict()
         post_dict['msgBiz'] = str(pn['msgBiz'])
@@ -204,13 +205,16 @@ for num, pn in enumerate(prfcursor):
         sum_contrib = 0
         for j in range(len(df)):
             sum_contrib += contrib[j][idx]
+        keywords = [str(tf_feature_names[i])
+                    for i in lda.components_[idx].argsort()[:-n_top_words - 1:-1]]
         top_dict['themes'].append({
             'name': f'主题{idx + 1}',
-            'importance': str(sum_contrib)
+            'importance': str(sum_contrib),
+            'keywords': keywords
         })
     print(top_dict)
     result = theme.update_one({
         'msgBiz': top_dict['msgBiz']
-    }, { '$set': top_dict }, upsert=True)
+    }, {'$set': top_dict}, upsert=True)
 
 prfcursor.close()

@@ -4,6 +4,8 @@ import numpy as np
 import pandas as pd
 import jieba
 from sklearn.metrics.pairwise import linear_kernel
+import pickle
+import os
 
 
 def load_stopwords():
@@ -33,59 +35,76 @@ db = conn.wechat_spider
 pstcol = db.posts
 prfcol = db.profiles
 pstcursor = pstcol.find(no_cursor_timeout=True)
-prfcursor = prfcol.find(no_cursor_timeout=True)
+#prfcursor = prfcol.find(no_cursor_timeout=True)
 
+if os.path.exists('cutted.pkl'):
+	with open('cutted.pkl','rb') as f:
+		df = pickle.load(f)
+	print("loaded from old...")
+else:
+	print('data preprocessing...')
+	pid = []
+	pubname = []
+	tit = []
+	dig = []
+	con = []
+	readNum = []
 
-pid = []
-pubname = []
-tit = []
-dig = []
-con = []
-readNum = []
+	for i, s in enumerate(pstcursor):
+		if 'content' in s:
+			'''
+			for _, t in enumerate(prfcursor):
+				if s['msgBiz'] == t['msgBiz']:
+					pubname.append(str(t['title']))
+			'''
+			'''
+			if s['msgBiz'] =="MjM5MDc0NTY2OA==":
+				pubname.append(str('洞见'))
+			elif s['msgBiz'] == "MzUxODM4OTYzMg==":
+				pubname.append(str('清华小五爷园'))
+			elif s['msgBiz'] == "MzA4MjEyNTA5Mw==":
+				pubname.append(str('Python开发者'))
+			elif s['msgBiz'] == "MzI1NDY5NDM3OQ==":
+				pubname.append(str('凤凰WEEKLY'))
+			else:
+				pubname.append(str('沃顿商业'))
+			'''
+			pid.append(str(s['_id']))
+			tit.append(str(s['title']))
+			dig.append(str(s['digest']))
+			con.append(str(s['content']))
+			if 'readNum' in s:
+				readNum.append(str(s['readNum']))
+			else:
+				readNum.append(0)
 
-for i, s in enumerate(pstcursor):
-	if 'content' in s:
-		'''
-		for _, t in enumerate(prfcursor):
-			if s['msgBiz'] == t['msgBiz']:
-				pubname.append(str(t['title']))
-		'''
-		if s['msgBiz'] =="MjM5MDc0NTY2OA==":
-			pubname.append(str('洞见'))
-		elif s['msgBiz'] == "MzUxODM4OTYzMg==":
-			pubname.append(str('清华小五爷园'))
-		elif s['msgBiz'] == "MzA4MjEyNTA5Mw==":
-			pubname.append(str('Python开发者'))
-		elif s['msgBiz'] == "MzI1NDY5NDM3OQ==":
-			pubname.append(str('凤凰WEEKLY'))
-		else:
-			pubname.append(str('沃顿商业'))
-		pid.append(str(s['_id']))
-		tit.append(str(s['title']))
-		dig.append(str(s['digest']))
-		con.append(str(s['content']))
-		if 'readNum' in s:
-			readNum.append(str(s['readNum']))
-		else:
-			readNum.append(0)
-dic = {"pid":pid,
-       "pubname":pubname,
-       "title":tit,
-       "digest":dig,
-       "content":con,
-       "readNum":readNum}
+	pstcursor.close()
+	
+	dic = {"pid":pid,
+	       #"pubname":pubname,
+	       "title":tit,
+	       "digest":dig,
+	       "content":con,
+	       "readNum":readNum}
 
-df = pd.DataFrame(dic)
+	df = pd.DataFrame(dic)
 
-df.head()
+	con = df['title'] + df['content']
 
-con = df['title'] + df['content']
+	print('load stopwords...')
 
-stopwords = load_stopwords()
+	stopwords = load_stopwords()
 
-df["con"] = con
+	df["con"] = con
 
-df["con_cutted"] = df.con.apply(word_cut)
+	print('cut words...')
+
+	df["con_cutted"] = df.con.apply(word_cut)
+
+	with open('cutted.pkl','wb') as f:
+		pickle.dump(df,f)
+
+	print('done.')
 
 tfidf = TfidfVectorizer().fit_transform(df["con_cutted"])
 

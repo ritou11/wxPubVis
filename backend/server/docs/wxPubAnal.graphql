@@ -7,6 +7,7 @@ type Query {
   totalPost(input: PostCountInput!): Int
   profileList(input: ProfileListInput!): [Profile!]
   totalProfile(input: ProfileCountInput): Int
+  postThemes(input: PostInput!): PostThemes
   postVis(input: PostVisInput!): PostVis
   profileVis(input: ProfileVisInput!): ProfileVis
 }
@@ -102,4 +103,20 @@ type PostVis {
 
 type ProfileVis {
   img: String
+}
+
+type PostThemes {
+  pId: ID!
+  themes: [PostTheme!]
+}
+
+type PostTheme {
+  theme: String
+  weight: Float
+  words: [PostWord!]
+}
+
+type PostWord {
+  name: String
+  freq: Float
 }

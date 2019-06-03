@@ -4,6 +4,7 @@ const fs = require('fs');
 // const { Comment } = require('../../models/comment');
 const { Post } = require('../../models/post');
 const { Profile } = require('../../models/profile');
+const { Perdoc } = require('../../models/perdoc');
 const { project, resolvers } = require('./projection');
 
 const typeDefs = fs.readFileSync('./docs/wxPubAnal.graphql', 'utf8');
@@ -102,6 +103,14 @@ const schema = makeExecutableSchema({
         }
         const res = await Profile.find(query).count();
         return res;
+      },
+      async postThemes(parent, { input }, context, info) {
+        const proj = project(info);
+        let result = await Perdoc.findOne({
+          pid: input.pId,
+        }, proj);
+        result = result && result.toObject();
+        return result;
       },
     },
     Post: {

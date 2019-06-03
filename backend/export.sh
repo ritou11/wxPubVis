@@ -6,8 +6,9 @@ cd ..
 collections=(
   posts
   profiles
-  comments
+  perpub
   perdoc
+  pubposts
 )
 for col in "${collections[@]}"; do
     echo "exporting $col..."

@@ -8,6 +8,7 @@ type Query {
   profileList(input: ProfileListInput!): [Profile!]
   totalProfile(input: ProfileCountInput): Int
   postThemes(input: PostInput!): PostThemes
+  postThemesByProfile(input: PostInput!): PostThemesByProfile
   profileThemes(input: ProfileInput!): ProfileThemes
   postVis(input: PostVisInput!): PostVis
   profileVis(input: ProfileVisInput!): ProfileVis
@@ -112,10 +113,22 @@ type PostThemes {
   themes: [PostTheme!]
 }
 
+type PostThemesByProfile {
+  pId: ID!
+  msgBiz: String
+  themes: [PostThemeByProfile!]
+}
+
 type PostTheme {
   theme: String
   weight: Float
   words: [PostWord!]
+}
+
+type PostThemeByProfile {
+  name: String
+  weight: Float
+  contrib: Float
 }
 
 type ProfileThemes {

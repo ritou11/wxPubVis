@@ -93,34 +93,28 @@ def extractPubPosts(msg):
 
 
 # 连接数据库
-conn = MongoClient("mongodb://127.0.0.1:27017")
+conn = MongoClient("mongodb://localhost:27017")
 db = conn.wechat_spider
 
 pstcol = db.posts
 prfcol = db.profiles
 stopwords = load_stopwords()
 
-post = db.post
+post = db.pubposts
 
-theme = db.theme
+theme = db.perpub
 
 prfcursor = prfcol.find()
 
 for num, pn in enumerate(prfcursor):
+    print(f'Profile {num}...')
 
-    print(num)
-
-    msg = {"msgBiz": str(pn['msgBiz'])}
-
-    df = extractPubPosts(msg)
-
-    print(df)
-
+    df = extractPubPosts({
+        'msgBiz': pn['msgBiz']
+    })
     con = df['title'] + df['content']
-
-    df["con"] = con
-
-    df["con_cutted"] = df.con.apply(word_cut)
+    df['con'] = con
+    df['con_cutted'] = df.con.apply(word_cut)
 
     n_features = 1000
     n_topics = 30
@@ -144,8 +138,7 @@ for num, pn in enumerate(prfcursor):
     tf_feature_names = tf_vectorizer.get_feature_names()
     print("主题-相关词")
     print_top_words(lda, tf_feature_names, n_top_words)
-    print('\n')
-    print('\n')
+    print()
     print("文章-主题权重")
     docres = doc_top(lda, tf)
     print(docres)
@@ -157,26 +150,34 @@ for num, pn in enumerate(prfcursor):
     contrib = np.multiply(docres, readnum)
     print(contrib)
     for idx in range(0, len(df)):
-        post_dict = {}
+        post_dict = dict()
         post_dict['msgBiz'] = str(pn['msgBiz'])
-        post_dict['pid'] = str(df['pid'][idx])
-        for j in range(0, n_topics):
-            if 'theme' in post_dict:
-                post_dict['theme'].append({'name': str(
-                    "主题" + str(j + 1)), 'weight': docres[idx][j], 'contrib': contrib[idx][j]})
+        post_dict['pId'] = str(df['pid'][idx])
+        for j in range(n_topics):
+            if 'themes' in post_dict:
+                post_dict['themes'].append({
+                    'name': f'主题{j + 1}',
+                    'weight': docres[idx][j],
+                    'contrib': contrib[idx][j]
+                })
             else:
-                post_dict['theme'] = [{'name': str(
-                    "主题" + str(j + 1)), 'weight': docres[idx][j], 'contrib':contrib[idx][j]}]
-        print(post_dict)
-        result = post.insert_one(post_dict)
-        print(result)
+                post_dict['themes'] = [{
+                    'name': f'主题{j + 1}',
+                    'weight': docres[idx][j],
+                    'contrib': contrib[idx][j]
+                }]
+        result = post.update_one({'pId': post_dict['pId']}, 
+                                 {'$set': post_dict}, upsert=True)
     top_dict = []
-    for idx in range(0, n_topics):
+    for idx in range(n_topics):
         sum_contrib = 0
         for j in range(0, len(df)):
             sum_contrib += contrib[j][idx]
-        top_dict.append({'msgBiz': str(pn['msgBiz']), 'name': str(
-            "主题" + str(idx + 1)), 'importance': str(sum_contrib)})
+        top_dict.append({
+            'msgBiz': str(pn['msgBiz']),
+            'name': f'主题{idx + 1}',
+            'importance': str(sum_contrib)
+        })
     print(top_dict)
     result = theme.insert_many(top_dict)
     print(result)

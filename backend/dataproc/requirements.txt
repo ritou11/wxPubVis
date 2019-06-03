@@ -1,2 +1,8 @@
 pymongo
 snownlp
+gensim
+pprint
+jieba
+numpy
+pandas
+sklearn

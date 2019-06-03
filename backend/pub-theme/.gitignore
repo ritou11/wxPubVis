@@ -1,0 +1,4 @@
+.ipynb*
+*.pkl
+model.*
+*.lda

@@ -1,5 +1,5 @@
 # encoding=utf-8
-
+import os
 import jieba
 from pymongo import MongoClient
 import numpy as np
@@ -7,6 +7,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.decomposition import LatentDirichletAllocation
 from sklearn.feature_extraction.text import TfidfTransformer
+import pickle
 
 
 def load_stopwords():
@@ -46,49 +47,43 @@ def doc_top(model, tf):
     return docres
 
 
-def extractPubPosts(msg):
+def extractPubPosts(msg, pname):
 
-    pid = []
-    pubname = []
-    tit = []
-    dig = []
-    con = []
-    readNum = []
-
-    print(msg['msgBiz'])
+    pid = list()
+    pubname = list()
+    tit = list()
+    dig = list()
+    con = list()
+    readNum = list()
 
     pstcursor = pstcol.find(msg)
 
-    prfcursor = prfcol.find()
+    prfcursor = prfcol.find_one(msg)
 
     for i, s in enumerate(pstcursor):
         if 'content' in s:
-            for idx, pn in enumerate(prfcursor):
-                print(idx)
-                print(str(pn['msgBiz']))
-                if msg['msgBiz'] == str(pn['msgBiz']):
-                    pname = pn['title']
-            pubname.append(str(pname))
+            pubname.append(pname)
             pid.append(str(s['_id']))
             tit.append(str(s['title']))
             dig.append(str(s['digest']))
             con.append(str(s['content']))
             if 'readNum' in s:
-                readNum.append(str(s['readNum']))
+                readNum.append(s['readNum'])
             else:
                 readNum.append(0)
-    dic = {"pid": pid,
-           "pubname": pubname,
-           "title": tit,
-           "digest": dig,
-           "content": con,
-           "readNum": readNum}
 
-    df = pd.DataFrame(dic)
+    df = pd.DataFrame({
+        'pid': pid,
+        'pubname': pubname,
+        'title': tit,
+        'digest': dig,
+        'content': con,
+        'readNum': readNum
+    })
 
     return df
 
-#theme:{msgBiz, theme, weight}
+# theme:{msgBiz, theme, weight}
 # post:{msgBiz, pid, theme:[name, weight, contrib]}
 
 
@@ -104,17 +99,27 @@ post = db.pubposts
 
 theme = db.perpub
 
-prfcursor = prfcol.find()
+prfcursor = prfcol.find(no_cursor_timeout=True)
 
 for num, pn in enumerate(prfcursor):
-    print(f'Profile {num}...')
+    print(f'#{num + 1} profile {pn["title"]}...')
 
-    df = extractPubPosts({
-        'msgBiz': pn['msgBiz']
-    })
-    con = df['title'] + df['content']
-    df['con'] = con
-    df['con_cutted'] = df.con.apply(word_cut)
+    cuttedName = f'{pn["msgBiz"]}.pkl'
+    if os.path.exists(cuttedName):
+        with open(cuttedName, 'rb') as f:
+            df = pickle.load(f)
+        print("Cut loaded from old")
+    else:
+        print('jieba...')
+        df = extractPubPosts({
+            'msgBiz': pn['msgBiz']
+        }, pn['title'])
+        con = df['title'] + df['content']
+        df['con'] = con
+        df['con_cutted'] = df.con.apply(word_cut)
+        with open(cuttedName, 'wb') as f:
+            pickle.dump(df, f)
+        print('Done jieba!')
 
     n_features = 1000
     n_topics = 30
@@ -124,25 +129,48 @@ for num, pn in enumerate(prfcursor):
                                     stop_words='english',
                                     max_df=0.4,
                                     min_df=10)
-
     tf = tf_vectorizer.fit_transform(df.con_cutted)
+    print('Done fit_transform!')
 
-    lda = LatentDirichletAllocation(learning_method='online',
-                                    n_components=n_topics,
-                                    perp_tol=0.001,
-                                    doc_topic_prior=0.001,
-                                    topic_word_prior=0.001,
-                                    max_iter=300)
-    lda.fit(tf)
+    ldaName = f'{pn["msgBiz"]}.lda'
+    if os.path.exists(ldaName):
+        with open(ldaName, 'rb') as f:
+            lda = pickle.load(f)
+        print("LDA loaded from old")
+    else:
+        print('lda...')
+        lda = LatentDirichletAllocation(learning_method='online',
+                                        n_components=n_topics,
+                                        perp_tol=0.001,
+                                        doc_topic_prior=0.001,
+                                        topic_word_prior=0.001,
+                                        max_iter=300,
+                                        n_jobs=-1,
+                                        verbose=1)
+        lda.fit(tf)
+        with open(ldaName, 'wb') as f:
+            pickle.dump(lda, f)
+        print('Done lda!')
 
     tf_feature_names = tf_vectorizer.get_feature_names()
+
     print("主题-相关词")
     print_top_words(lda, tf_feature_names, n_top_words)
-    print()
+
     print("文章-主题权重")
-    docres = doc_top(lda, tf)
-    print(docres)
-    print("\n文章-主题贡献")
+    docresName = f'{pn["msgBiz"]}-docres.lda'
+    if os.path.exists(docresName):
+        with open(docresName, 'rb') as f:
+            docres = pickle.load(f)
+        print("Docres loaded from old")
+    else:
+        print('docres...')
+        docres = doc_top(lda, tf)
+        with open(docresName, 'wb') as f:
+            pickle.dump(docres, f)
+        print('Done docres!')
+
+    print("文章-主题贡献")
     readn = df['readNum']
     readnum = np.array(df['readNum']).reshape(len(readn), 1)
     readnum = readnum.repeat(30, axis=1)
@@ -166,18 +194,23 @@ for num, pn in enumerate(prfcursor):
                     'weight': docres[idx][j],
                     'contrib': contrib[idx][j]
                 }]
-        result = post.update_one({'pId': post_dict['pId']}, 
+        result = post.update_one({'pId': post_dict['pId']},
                                  {'$set': post_dict}, upsert=True)
-    top_dict = []
+    top_dict = {
+        'msgBiz': pn['msgBiz'],
+        'themes': []
+    }
     for idx in range(n_topics):
         sum_contrib = 0
-        for j in range(0, len(df)):
+        for j in range(len(df)):
             sum_contrib += contrib[j][idx]
-        top_dict.append({
-            'msgBiz': str(pn['msgBiz']),
+        top_dict['themes'].append({
             'name': f'主题{idx + 1}',
             'importance': str(sum_contrib)
         })
     print(top_dict)
-    result = theme.insert_many(top_dict)
-    print(result)
+    result = theme.update_one({
+        'msgBiz': top_dict['msgBiz']
+    }, { '$set': top_dict }, upsert=True)
+
+prfcursor.close()

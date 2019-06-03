@@ -41,7 +41,6 @@ conn = MongoClient("mongodb://localhost:27017")
 db = conn.wechat_spider
 
 pstcol = db.posts
-cursor = pstcol.find(no_cursor_timeout=True)
 
 pid = []
 tit = []
@@ -49,10 +48,13 @@ dig = []
 con = []
 readNum = []
 
-if load_df:
+if os.path.exists('cutted.pkl'):
     with open('cutted.pkl', 'rb') as f:
         df = pickle.load(f)
+    print("loaded from old...")
 else:
+    print('data preprocessing...')
+    cursor = pstcol.find(no_cursor_timeout=True)
     for i, s in enumerate(cursor):
         if (i % 10 == 0):
             print(f'\r{i}', end='', flush=True)
@@ -79,6 +81,7 @@ else:
     df["con_cutted"] = df.con.apply(word_cut)
     with open('cutted.pkl', 'wb') as f:
         pickle.dump(df, f)
+    print('done.')
 
 # 每一个单词关联一个唯一的ID
 docs = [[word for word in df.con_cutted[i].split()] for i in range(0, len(df))]

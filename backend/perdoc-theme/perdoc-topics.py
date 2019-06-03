@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # coding: utf-8
+import pickle
 from pymongo import MongoClient
 import traceback
 from gensim import corpora, similarities
@@ -13,7 +14,8 @@ import os
 from pprint import pprint
 import jieba
 
-load_df = True
+load_df = False
+
 
 def load_stopwords():
     f_stop = open('stop_words.txt', 'r')
@@ -42,50 +44,34 @@ pstcol = db.posts
 cursor = pstcol.find(no_cursor_timeout=True)
 
 pid = []
-pubname = []
 tit = []
 dig = []
 con = []
 readNum = []
 
-for i, s in enumerate(cursor):
-    if (i % 10 == 0):
-        print(f'\r{i}', end='', flush=True)
-    if 'content' in s.keys():
-        if s['msgBiz'] == "MjM5MDc0NTY2OA==":
-            pubname.append(str('洞见'))
-        elif s['msgBiz'] == "MzUxODM4OTYzMg==":
-            pubname.append(str('清华小五爷园'))
-        elif s['msgBiz'] == "MzA4MjEyNTA5Mw==":
-            pubname.append(str('Python开发者'))
-        elif s['msgBiz'] == "MzI1NDY5NDM3OQ==":
-            pubname.append(str('凤凰WEEKLY'))
-        else:
-            pubname.append(str('沃顿商业'))
-        pid.append(str(s['_id']))
-        tit.append(str(s['title']))
-        dig.append(str(s['digest']))
-        con.append(str(s['content']))
-        if 'readNum' in s.keys():
-            readNum.append(str(s['readNum']))
-        else:
-            readNum.append(0)
-cursor.close()
-print()
-
-dic = {"pid": pid,
-       "pubname": pubname,
-       "title": tit,
-       "digest": dig,
-       "content": con,
-       "readNum": readNum}
-
-
-import pickle
 if load_df:
     with open('cutted.pkl', 'rb') as f:
         df = pickle.load(f)
 else:
+    for i, s in enumerate(cursor):
+        if (i % 10 == 0):
+            print(f'\r{i}', end='', flush=True)
+        if 'content' in s.keys():
+            pid.append(str(s['_id']))
+            tit.append(s['title'])
+            dig.append(s['digest'])
+            con.append(s['content'])
+            if 'readNum' in s.keys():
+                readNum.append(s['readNum'])
+            else:
+                readNum.append(0)
+    cursor.close()
+    print()
+    dic = {"pid": pid,
+           "title": tit,
+           "digest": dig,
+           "content": con,
+           "readNum": readNum}
     df = pd.DataFrame(dic)
     con = df['title'] + df['content']
     stopwords = load_stopwords()
@@ -113,11 +99,6 @@ else:
         bag_of_words_corpus, num_topics=80, id2word=word_count_dict)
     lda_model.save(model_name)
     print("loaded from new")
-# df.head()
-# {pid:pid, theme: “主题1”, words: [{name:”xxx”, freq:123}], weight}
-
-# with open('cutted.pkl', 'wb') as f:
-    # pickle.dump(df, f)
 
 perdoc = db.perdoc
 topic_num = 3
@@ -129,62 +110,25 @@ for i in range(0, len(df)):
     result = sorted(result, key=lambda tup: -1 * tup[1])  # 排序，只取前三的主题
     idx = 1
     postWithTheme = dict()
-    postWithTheme['pid'] = str(df['pid'][i])
+    postWithTheme['pid'] = df['pid'][i]
     postWithTheme['themes'] = list()
     print(f'\r文章{i + 1} ', end='')
     for topic in result:
         if idx > topic_num:
             break
-        # print_topic(x,y) x是主题的id，y是打印该主题的前y个词，词是按权重排好序的
         postTheme = dict()
-        postTheme['theme'] = str("主题" + str(idx))
+        postTheme['theme'] = f'主题{idx}'
         print(f'主题{idx}', end=' ')
-        postTheme['weight'] = str(topic[1])
-        s = str(lda_model.print_topic(topic[0], 30))
-        freq_word = s.split(" + ")
-        for j in range(0, len(freq_word)):
-            fw = freq_word[j].split("*")
+        postTheme['weight'] = topic[1].item()
+        freq_word = lda_model.show_topic(topic[0], 30)
+        for fw in freq_word:
             if 'words' in postTheme.keys():
-                postTheme['words'].append({'name': str(fw[1]), 'freq': fw[0]})
+                postTheme['words'].append({'name': fw[0], 'freq': fw[1].item()})
             else:
-                postTheme['words'] = [{'name': str(fw[1]), 'freq':fw[0]}]
+                postTheme['words'] = [{'name': fw[0], 'freq': fw[1].item()}]
         postWithTheme['themes'].append(postTheme)
         idx += 1
-    result = perdoc.update_one({ 'pid': postWithTheme['pid'] }, { '$set': postWithTheme }, upsert=True)
+    result = perdoc.update_one({'pid': postWithTheme['pid']}, {
+                               '$set': postWithTheme}, upsert=True)
 
-print(db.perdoc.count())
-
-"""
-#{pid:待查询文章id, sid:匹配文章id, similarity:pid和sid两篇文章相似度}
-# 每篇文章的相似列表
-sim = db.sim
-# 用bag_of_words_corpus作为特征，训练tf_idf_model
-tf_idf_model = gensim.models.TfidfModel(bag_of_words_corpus)
-# 每篇文章在vsm上的tf-idf表示
-corpus_tfidf = tf_idf_model[bag_of_words_corpus]
-
-
-def similarity(i, query, dictionary, corpus_tfidf):
-    try:
-        # 建立索引
-        index = similarities.MatrixSimilarity(corpus_tfidf)
-        # 在dictionary建立query的vsm_tf表示
-        query_bow = dictionary.doc2bow(query.lower().split())
-        # 查询在n_topics维空间的表示
-        query_lda = tf_idf_model[query_bow]
-        # 计算相似度
-        simi = index[query_lda]
-        query_simi_list = []
-        for idx, item in enumerate(simi):
-            if idx != i:
-                query_simi_list.append({'pid': str(df['pid'][i]), 'sid': str(
-                    df['pid'][idx]), 'similarity': str(item)})
-        result = sim.insert_many(query_simi_list)
-    except Exception as e:
-        print(traceback.print_exc())
-
-
-for i in range(0, len(df)):
-    print("相似权重矩阵：")
-    similarity(i, str(df.con_cutted[i]), word_count_dict, corpus_tfidf)
-"""
+print(perdoc.count_documents({}))

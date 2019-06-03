@@ -3,7 +3,9 @@ import { ApolloClient } from 'apollo-boost';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 
+const { log } = console;
 const apiHost = process.env.REACT_APP_API_HOST || 'https://wxpub-api.nogeek.top';
+log(`API host: ${process.env.REACT_APP_API_HOST}`);
 
 const cache = new InMemoryCache();
 const link = new HttpLink({

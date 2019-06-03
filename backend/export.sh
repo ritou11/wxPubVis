@@ -7,6 +7,7 @@ collections=(
   posts
   profiles
   comments
+  perdoc
 )
 for col in "${collections[@]}"; do
     echo "exporting $col..."

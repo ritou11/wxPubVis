@@ -18,7 +18,7 @@ for i, doc in enumerate(cursor):
         continue
     sumTotal = 0
     sumSenti = 0
-    for cmt in cmtcol.find({ 'postId': doc['_id']}, projection={ 'likeNum': 1, 'senti': 1 }):
+    for cmt in cmtcol.find({'postId': doc['_id']}, projection={'likeNum': 1, 'senti': 1}):
         if 'senti' not in cmt.keys():
             continue
         like = cmt['likeNum'] if 'likeNum' in cmt.keys() else 0
@@ -28,6 +28,6 @@ for i, doc in enumerate(cursor):
     if sumTotal == 0:
         continue
     comSenti = sumSenti / sumTotal
-    pstcol.update_one({ '_id': doc['_id'] }, { '$set': { 'comSenti': comSenti } })
+    pstcol.update_one({'_id': doc['_id']}, {'$set': {'comSenti': comSenti}})
 
 cursor.close()

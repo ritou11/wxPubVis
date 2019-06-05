@@ -50,7 +50,13 @@ class PostVis extends Component {
                     title
                     headimg
                   }
-                  
+                  related {
+                    pId
+                    info {
+                      title
+                    }
+                    simi
+                  }
                 }
               }
             `}

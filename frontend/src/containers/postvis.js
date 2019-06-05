@@ -7,6 +7,7 @@ import { gql } from 'apollo-boost';
 import { gqlClient } from '../config';
 
 import Loading from '../components/loading';
+import PostCard from '../components/postCard';
 
 const styles = {
   drawer: {
@@ -44,9 +45,12 @@ class PostVis extends Component {
                   likeNum
                   cover
                   link
+                  sourceUrl
                   profile {
                     title
+                    headimg
                   }
+                  
                 }
               }
             `}
@@ -55,13 +59,9 @@ class PostVis extends Component {
               if (loading) return <Loading />;
               if (error || !data || !data.post) return <p>Error :(</p>;
               const { post } = data;
-              console.log(data);
+              console.log(post);
               return (
-                <div>
-                  <h2>
-                    {post.title}
-                  </h2>
-                </div>
+                <PostCard data={post}/>
               );
             }}
           </Query>

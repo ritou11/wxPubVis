@@ -176,7 +176,7 @@ class Posts extends React.Component {
               <th>更新时间 {this.sortBy('updatedAt')}</th>
               <th>间隔</th>
               <th>公众号</th>
-              <th>评论</th>
+              <th>可视化</th>
             </tr>
           </thead>
           <tbody>
@@ -192,7 +192,7 @@ class Posts extends React.Component {
                   <td>{i.updatedAt}</td>
                   <td>{i.updateInterval}</td>
                   <td>{i.showProfile}</td>
-                  <td>{i.senti}</td>
+                  <td><Link to={`/postvis?pid=${i.pId}`}>详情</Link></td>
                 </tr>
               ))
             }

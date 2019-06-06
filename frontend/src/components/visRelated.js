@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import * as _ from 'lodash';
+import { withStyles } from '@material-ui/core/styles';
 import * as d3 from 'd3';
 import 'd3-selection-multi';
 
@@ -9,6 +10,16 @@ const colormap = (n) => {
   if (n < 0.5) b = 0;
   else b = (n - 0.5) * 2;
   return `hsl(${180 - 180 * b},50%,50%)`;
+};
+
+const styles = {
+  drawer: {
+    width: 240,
+    flexShrink: 0,
+  },
+  toltip: {
+    padding: '8px 12px',
+  },
 };
 
 class VisRelated extends Component {
@@ -62,7 +73,7 @@ class VisRelated extends Component {
 
   drawChart() {
     if (!this.props.data || !this.props.data.length) return;
-    const { data } = this.props;
+    const { data, classes } = this.props;
     const sts = this.settings;
 
     const drawData = _.slice(data, 1);
@@ -80,6 +91,11 @@ class VisRelated extends Component {
       drawData[i].a1 = aScale(tread);
     }
 
+    const toolTips = d3.select('body').append('div')
+      .attr('class', 'toolTips')
+      .style('opacity', 0)
+      .style('position', 'absolute');
+
     const arcs = this.mainGroup.selectAll('.arcs')
       .data(drawData)
       .enter()
@@ -93,7 +109,47 @@ class VisRelated extends Component {
         .outerRadius((d) => rScale(d.simi))
         .startAngle((d) => d.a1)
         .endAngle((d) => d.a0)
-        .padAngle(0.01));
+        .padAngle(0.01))
+      .on('mouseover', (dd, i, nodes) => {
+        d3.select(nodes[i])
+          .transition()
+          .style('opacity', 0.7)
+          .attr('d', d3.arc()
+            .innerRadius(0)
+            .outerRadius(1.2 * rScale(dd.simi))
+            .startAngle(dd.a1)
+            .endAngle(dd.a0)
+            .padAngle(0.01))
+          .ease(d3.easeBounceOut);
+      })
+      .on('mousemove', (d) => {
+        const html = `<div class="clearfix">
+          <div class="border" style="background:#eeeeee">
+            <p>${d.info.title}</p>
+            <p>${d.info.title}</p>
+          </div>
+        </div>`;
+        const mouseX = d3.event.clientX + 30;
+        const mouseY = d3.event.clientY - 30;
+        toolTips.html(`<div class="${classes.toltip}">${html}</div>`)
+          .style('opacity', 1)
+          .style('left', `${mouseX}px`)
+          .style('top', `${mouseY}px`);
+      })
+      .on('mouseout', (dd, i, nodes) => {
+        d3.select(nodes[i])
+          .transition()
+          .style('opacity', 1)
+          .attr('d', d3.arc()
+            .innerRadius(0)
+            .outerRadius(rScale(dd.simi))
+            .startAngle(dd.a1)
+            .endAngle(dd.a0)
+            .padAngle(0.01))
+          .ease(d3.easeBounceOut);
+        toolTips.style('opacity', 0);
+        toolTips.html('');
+      });
   }
 
   render() {
@@ -105,4 +161,4 @@ class VisRelated extends Component {
   }
 }
 
-export default VisRelated;
+export default withStyles(styles)(VisRelated);

@@ -1,6 +1,5 @@
 import React from 'react';
 import clsx from 'clsx';
-import { round } from 'lodash';
 import moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';

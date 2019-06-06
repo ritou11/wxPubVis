@@ -93,7 +93,7 @@ tfidf = TfidfVectorizer().fit_transform(df["con_cutted"])
 for i in range(0, len(df)):
     print(f'\r文章{i+1}', end='')
     cosine_similarities = linear_kernel(tfidf[i], tfidf).flatten()
-    related_docs_indices = cosine_similarities.argsort()[:-11:-1]  # 取前四个相似文章
+    related_docs_indices = cosine_similarities.argsort()[::-1][1:11:1]#取前10个相似文章
     set = {'related': [{
         'pId': df["pid"][r],
         'simi': cosine_similarities[r].item()

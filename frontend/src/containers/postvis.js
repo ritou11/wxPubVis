@@ -54,6 +54,8 @@ class PostVis extends Component {
                     pId
                     info {
                       title
+                      readNum
+                      senti
                     }
                     simi
                   }
@@ -65,9 +67,10 @@ class PostVis extends Component {
               if (loading) return <Loading />;
               if (error || !data || !data.post) return <p>Error :(</p>;
               const { post } = data;
-              console.log(post);
               return (
-                <PostCard data={post}/>
+                <div>
+                  <PostCard data={post}/>
+                </div>
               );
             }}
           </Query>

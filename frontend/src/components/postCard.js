@@ -16,11 +16,7 @@ import red from '@material-ui/core/colors/red';
 import Button from '@material-ui/core/Button';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import VisRelated from './visRelated';
 
 const styles = (theme) => ({
   card: {
@@ -115,26 +111,9 @@ class PostCard extends React.Component {
             {(() => {
               if (data.related) {
                 return (
-                  <Table className={classes.table} size="small">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>序号</TableCell>
-                        <TableCell>文章标题</TableCell>
-                        <TableCell align="right">相关度</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {data.related.map((ra, idx) => (
-                        <TableRow key={ra.pId}>
-                          <TableCell component="th" scope="row">
-                            {idx + 1}
-                          </TableCell>
-                          <TableCell>{ra.info.title}</TableCell>
-                          <TableCell align="right">{round(ra.simi, 2)}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                  <VisRelated data={data.related} settings={{
+                    outerR: 100,
+                  }}/>
                 );
               }
               return (

@@ -15,9 +15,4 @@ module.exports = gqlProjection({
       postsDataCount: null,
     },
   },
-  PostThemes: {
-    proj: {
-      pId: 'pid',
-    },
-  },
 });

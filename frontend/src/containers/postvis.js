@@ -8,8 +8,13 @@ import { gqlClient } from '../config';
 
 import Loading from '../components/loading';
 import PostCard from '../components/postCard';
+import PostCloudCard from '../components/postCloudCard';
 
 const styles = {
+  root: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
   drawer: {
     width: 240,
     flexShrink: 0,
@@ -25,10 +30,10 @@ class PostVis extends Component {
   };
 
   render() {
-    const { location } = this.props;
+    const { location, classes } = this.props;
     const { query } = location;
     return (
-      <div>
+      <div className={classes.root}>
         <ApolloProvider client={gqlClient}>
           <Query
             query={gql`
@@ -71,6 +76,42 @@ class PostVis extends Component {
               return (
                 <div>
                   <PostCard data={post}/>
+                </div>
+              );
+            }}
+          </Query>
+          <Query
+            query={gql`
+              {
+                post(
+                  input:{
+                    pId:"${query.pid}"
+                  }
+                ) {
+                  title
+                  publishAt
+                }
+                postThemes(
+                  input:{
+                    pId:"${query.pid}"
+                  }
+                ) {
+                  theme
+                  words {
+                    name
+                    freq
+                  }
+                  weight
+                }
+              }
+            `}
+          >
+            {({ loading, error, data }) => {
+              if (loading) return <Loading />;
+              if (error || !data || !data.postThemes) return <p>Error :(</p>;
+              return (
+                <div>
+                  <PostCloudCard data={data} />
                 </div>
               );
             }}

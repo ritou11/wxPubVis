@@ -106,13 +106,12 @@ const schema = makeExecutableSchema({
         const res = await Profile.find(query).count();
         return res;
       },
-      async postThemes(parent, { input }, context, info) {
-        const proj = project(info);
+      async postThemes(parent, { input }) {
         let result = await Perdoc.findOne({
           pid: input.pId,
-        }, proj);
+        });
         result = result && result.toObject();
-        return result;
+        return result.themes;
       },
       async profileThemes(parent, { input }, context, info) {
         const proj = project(info);

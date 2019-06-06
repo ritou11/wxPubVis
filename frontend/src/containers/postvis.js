@@ -55,6 +55,7 @@ class PostVis extends Component {
                     info {
                       title
                       readNum
+                      likeNum
                       senti
                     }
                     simi

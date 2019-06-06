@@ -110,9 +110,14 @@ class PostCard extends React.Component {
             {(() => {
               if (data.related) {
                 return (
-                  <VisRelated data={data.related} settings={{
-                    outerR: 100,
-                  }}/>
+                  <div>
+                    <Typography component="h5" variant="h5" align="center">
+                      相似文章
+                    </Typography>
+                    <VisRelated data={data.related} settings={{
+                      outerR: 100,
+                    }}/>
+                  </div>
                 );
               }
               return (

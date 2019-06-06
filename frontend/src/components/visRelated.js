@@ -18,7 +18,13 @@ const styles = {
     flexShrink: 0,
   },
   toltip: {
-    padding: '8px 12px',
+    padding: '8px',
+    background: 'rgba(0, 0, 0, 0.7)',
+    color: 'white',
+    borderRadius: '3px',
+    '& p': {
+      margin: '0',
+    },
   },
 };
 
@@ -102,7 +108,9 @@ class VisRelated extends Component {
       .append('g')
       .attr('class', (d, i) => `g-violin single-violin-${i}`)
       .attr('transform', `translate(${sts.outerR},${sts.outerR})`);
-    arcs.append('path')
+    arcs.append('a')
+      .attr('xlink:href', (d) => `postvis?pid=${d.pId}`)
+      .append('path')
       .attr('fill', (d) => colormap(d.info.senti))
       .attr('d', d3.arc()
         .innerRadius(0)
@@ -123,15 +131,12 @@ class VisRelated extends Component {
           .ease(d3.easeBounceOut);
       })
       .on('mousemove', (d) => {
-        const html = `<div class="clearfix">
-          <div class="border" style="background:#eeeeee">
-            <p>${d.info.title}</p>
-            <p>${d.info.title}</p>
-          </div>
-        </div>`;
         const mouseX = d3.event.clientX + 30;
         const mouseY = d3.event.clientY - 30;
-        toolTips.html(`<div class="${classes.toltip}">${html}</div>`)
+        toolTips.html(`<div class="border ${classes.toltip}">
+            <p>${d.info.title}</p>
+            <p>阅读量:${d.info.readNum} 点赞数:${d.info.likeNum}</p>
+          </div>`)
           .style('opacity', 1)
           .style('left', `${mouseX}px`)
           .style('top', `${mouseY}px`);

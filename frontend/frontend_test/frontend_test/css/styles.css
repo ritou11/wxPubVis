@@ -1,0 +1,37 @@
+body {
+  margin: 0px;
+  overflow: hidden;
+}
+
+.line-path {
+  fill: none;
+  
+  stroke-width: 3;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  mix-blend-mode: multiply;
+}
+
+text {
+  font-family: sans-serif;
+}
+
+.tick text {
+  font-size: 11px;
+  fill: #635F5D;
+}
+
+.tick line {
+  stroke: #C0C0BB;
+}
+
+.axis-label {
+  font-size: 15px;
+  fill: #8E8883;
+}
+
+.title {
+  font-size: 15px;
+  fill: #635F5D;
+/*	text-align: center;*/
+}

@@ -11,10 +11,16 @@ const styles = {
     width: 240,
     flexShrink: 0,
   },
+  node: {
+    '& text': {
+      fill: 'white',
+    },
+    cursor: 'pointer',
+  },
   tooltip: {
     position: 'fixed',
     padding: '8px',
-    background: 'rgba(0, 0, 0, 0.7)',
+    background: 'rgba(200, 200, 200, 0.7)',
     color: 'white',
     borderRadius: '3px',
     '& p': {
@@ -53,6 +59,7 @@ class VisThemebar extends Component {
   }
 
   componentDidUpdate() {
+    // TODO: consider update
   }
 
   initChart() {
@@ -75,7 +82,7 @@ class VisThemebar extends Component {
 
   drawChart() {
     if (!this.props.data || !this.props.data.length) return;
-    const { data } = this.props;
+    const { data, classes } = this.props;
     const sts = this.settings;
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -86,13 +93,13 @@ class VisThemebar extends Component {
       cum += data[i].weight;
     }
 
-    const tgroup = this.mainGroup.selectAll('.tgroup')
+    const tgroup = this.mainGroup.selectAll(`.${classes.node}`)
       .data(data)
       .enter()
       .append('g')
       .attrs((d) => ({
         transform: `translate(${d.dx},${0})`,
-        class: 'tgroup',
+        class: classes.node,
       }));
 
     tgroup.append('rect')
@@ -122,6 +129,7 @@ class VisThemebar extends Component {
             hidden: false,
           },
           words: d.words,
+          title: d.theme,
         });
       })
       .on('mouseout', (dd, i, nds) => {
@@ -148,9 +156,12 @@ class VisThemebar extends Component {
         height: sts.height,
       }));
     tgroup.append('text')
-      .attr('clip-path', (d) => `url(#${this.id}-mask-${d.theme})`)
-      .attr('dy', '1em')
-      .attr('text-anchor', 'start')
+      .attrs((d) => ({
+        'clip-path': `url(#${this.id}-mask-${d.theme})`,
+        dx: '5px',
+        dy: '1em',
+        'text-anchor': 'start',
+      }))
       .style('visibility', (d) => d.depth >= this.settings.textMaxDepth ? 'hidden' : 'visible')
       .style('font-size', '1em')
       .text((d) => d.theme);
@@ -166,12 +177,14 @@ class VisThemebar extends Component {
             left: this.state.tooltip.x,
             top: this.state.tooltip.y,
             opacity: this.state.tooltip.opacity,
-            hidden: this.state.tooltip.hidden,
+            visibility: this.state.tooltip.hidden ? 'hidden' : 'visible',
           }}>
-          <VisWordcloud data={this.state.words} settings={{
-            width: 200,
-            height: 200,
-          }}/>
+          <VisWordcloud data={this.state.words}
+            title={this.state.title}
+            settings={{
+              width: 200,
+              height: 200,
+            }}/>
         </div>
       </div>
     );

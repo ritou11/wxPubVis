@@ -12,8 +12,6 @@ class VisWordcloud extends Component {
     this.defaultSettings = {
       margin: { top: 10, right: 0, bottom: 10, left: 0 },
       textMargin: { top: 10, right: 30, bottom: 10, left: 10 },
-      color: 'blue',
-      sqrt: false,
     };
     this.settings = _.merge(this.defaultSettings, props.settings);
   }
@@ -23,16 +21,10 @@ class VisWordcloud extends Component {
     this.drawChart();
   }
 
-  componentDidUpdate() {
-    if (this.settings.outerR !== this.props.settings.outerR
-        || this.settings.margin !== this.props.settings.margin
-        || this.settings.textMargin !== this.props.settings.textMargin) {
-      if (this.svg) this.svg.remove();
-      this.initChart();
+  componentDidUpdate(prevProps) {
+    if (prevProps.title !== this.props.title) {
+      this.drawChart();
     }
-    this.settings = _.merge(this.defaultSettings, this.props.settings);
-    this.mainGroup.selectAll('*').remove();
-    this.drawChart();
   }
 
   initChart() {
@@ -59,7 +51,7 @@ class VisWordcloud extends Component {
     const sts = this.settings;
 
     const countMax = _.maxBy(data, (d) => d.freq).freq;
-    const sizeScale = d3.scaleLinear().domain([0, countMax]).range([10, 100]);
+    const sizeScale = d3.scaleLinear().domain([0, countMax]).range([10, sts.width / 5]);
     const drawData = _.map(data, (d) => ({
       text: d.name,
       size: sizeScale(d.freq),
@@ -70,6 +62,8 @@ class VisWordcloud extends Component {
       .rotate(0)
       .fontSize((d) => d.size)
       .on('end', () => {
+        this.mainGroup
+          .selectAll('text').remove('*');
         this.mainGroup
           .selectAll('text')
           .data(drawData)

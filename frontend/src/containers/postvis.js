@@ -8,7 +8,6 @@ import { gqlClient } from '../config';
 
 import Loading from '../components/loading';
 import PostCard from '../components/postCard';
-import PostCloudCard from '../components/postCloudCard';
 
 const styles = {
   root: {
@@ -66,31 +65,6 @@ class PostVis extends Component {
                     simi
                   }
                 }
-              }
-            `}
-          >
-            {({ loading, error, data }) => {
-              if (loading) return <Loading />;
-              if (error || !data || !data.post) return <p>Error :(</p>;
-              const { post } = data;
-              return (
-                <div>
-                  <PostCard data={post}/>
-                </div>
-              );
-            }}
-          </Query>
-          <Query
-            query={gql`
-              {
-                post(
-                  input:{
-                    pId:"${query.pid}"
-                  }
-                ) {
-                  title
-                  publishAt
-                }
                 postThemes(
                   input:{
                     pId:"${query.pid}"
@@ -108,10 +82,10 @@ class PostVis extends Component {
           >
             {({ loading, error, data }) => {
               if (loading) return <Loading />;
-              if (error || !data || !data.postThemes) return <p>Error :(</p>;
+              if (error || !data || !data.post) return <p>Error :(</p>;
               return (
                 <div>
-                  <PostCloudCard data={data} />
+                  <PostCard data={data}/>
                 </div>
               );
             }}

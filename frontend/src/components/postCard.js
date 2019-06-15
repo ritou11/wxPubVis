@@ -16,6 +16,7 @@ import Button from '@material-ui/core/Button';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import VisRelated from './visRelated';
+import VisThemebar from './visThemebar';
 
 const styles = (theme) => ({
   card: {
@@ -58,38 +59,45 @@ class PostCard extends React.Component {
 
   render() {
     const { classes, data } = this.props;
+    const { post, postThemes } = data;
     return (
       <Card className={classes.card}>
         <CardHeader
           avatar={
-            <Avatar aria-label={data.profile.title}
+            <Avatar aria-label={post.profile.title}
               className={classes.avatar}
-              src={data.profile.headimg}
+              src={post.profile.headimg}
             />
           }
           action={
-            <IconButton aria-label="Settings" href={data.link}>
+            <IconButton aria-label="Settings" href={post.link}>
               <MoreVertIcon />
             </IconButton>
           }
-          title={data.profile.title}
-          subheader={data.publishAt ? moment(data.publishAt).format('YY-MM-DD HH:mm') : '暂无'}
+          title={post.profile.title}
+          subheader={post.publishAt ? moment(post.publishAt).format('YY-MM-DD HH:mm') : '暂无'}
         />
         <CardMedia
           className={classes.media}
-          image={data.cover}
-          title={data.title}
+          image={post.cover}
+          title={post.title}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            {data.title}
+            {post.title}
           </Typography>
           <Typography variant="body2" color="textPrimary" component="p">
-            {data.digest}
+            {post.digest}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            阅读量：{data.readNum}，点赞数：{data.likeNum}
+            阅读量：{post.readNum}，点赞数：{post.likeNum}
           </Typography>
+        </CardContent>
+        <CardContent>
+          <VisThemebar data={postThemes} settings={{
+            width: 300,
+            height: 20,
+          }}/>
         </CardContent>
         <CardActions>
           <Button size="small" color="primary" href={data.sourceUrl}>
@@ -109,13 +117,13 @@ class PostCard extends React.Component {
         <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
           <CardContent>
             {(() => {
-              if (data.related) {
+              if (post.related) {
                 return (
                   <div>
                     <Typography component="h5" variant="h5" align="center">
                       相似文章
                     </Typography>
-                    <VisRelated data={data.related} settings={{
+                    <VisRelated data={post.related} settings={{
                       outerR: 100,
                     }}/>
                   </div>

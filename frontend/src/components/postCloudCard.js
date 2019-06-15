@@ -6,7 +6,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import red from '@material-ui/core/colors/red';
 
-import VisWordcloud from './visWordcloud';
+import VisThemebar from './visThemebar';
 
 const styles = (theme) => ({
   card: {
@@ -56,9 +56,9 @@ class PostCard extends React.Component {
           subheader={data.post.publishAt ? moment(data.post.publishAt).format('YY-MM-DD HH:mm') : '暂无'}
         />
         <CardContent>
-          <VisWordcloud data={data.postThemes} settings={{
-            width: 200,
-            height: 200,
+          <VisThemebar data={data.postThemes} settings={{
+            width: 300,
+            height: 20,
           }}/>
         </CardContent>
       </Card>

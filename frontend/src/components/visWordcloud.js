@@ -28,7 +28,7 @@ class VisWordcloud extends Component {
     this.id = _.uniqueId(`${this.name}-`);
     this.defaultSettings = {
       margin: { top: 10, right: 0, bottom: 10, left: 0 },
-      textMargin: { top: 10, right: 30, bottom: 10, left: 10 },
+      textMargin: { top: 10, right: 30, bottom: 10, left: 20 },
       color: 'blue',
       sqrt: false,
     };
@@ -66,7 +66,11 @@ class VisWordcloud extends Component {
       });
     this.mainGroup = this.svg.append('g')
       .attr('transform', `translate(${this.settings.margin.left
-        + this.settings.textMargin.left + this.settings.width / 2},${this.settings.margin.top
+        + this.settings.textMargin.left},${this.settings.margin.top
+        + this.settings.textMargin.top + this.settings.height / 2})`);
+    this.axisGroup = this.svg.append('g')
+      .attr('transform', `translate(${this.settings.margin.left
+        + this.settings.textMargin.left},${this.settings.margin.top
         + this.settings.textMargin.top + this.settings.height / 2})`);
   }
 
@@ -75,33 +79,67 @@ class VisWordcloud extends Component {
     const { data } = this.props;
     const sts = this.settings;
 
-    const themeData = data[0].words;
-    const countMax = _.maxBy(themeData, (d) => d.freq).freq;
-    const sizeScale = d3.scaleLinear().domain([0, countMax]).range([10, 100]);
-    const drawData = _.map(themeData, (d) => ({
-      text: d.name,
-      size: sizeScale(d.freq),
-    }));
+    _.forEach(data, (th) => {
+      _.forEach(th.words, (wd) => { wd.freq *= th.weight; });
+    });
+    const countMax = _.max(_.map(data, (th) => _.maxBy(th.words, (d) => d.freq).freq));
+    const sizeScale = d3.scaleLinear().domain([0, countMax]).range([8, _.max([sts.width, sts.height]) / 5]);
 
-    cloud().size([sts.width, sts.height])
-      .words(drawData)
-      .rotate(0)
-      .fontSize((d) => d.size)
-      .on('end', () => {
-        this.mainGroup
-          .selectAll('text')
-          .data(drawData)
-          .enter()
-          .append('text')
-          .style('font-size', (d) => `${d.size}px`)
-          .style('font-weight', '400')
-          .style('font-family', 'Roboto', 'Helvetica', 'Arial', 'sans-serif')
-          .style('fill', (d, i) => d3.schemeCategory10[i % 10])
-          .attr('text-anchor', 'middle')
-          .attr('transform', (d) => `translate(${[d.x, d.y]})rotate(${d.rotate})`)
-          .text((d) => d.text);
-      })
-      .start();
+    const totalWeight = _.sumBy(data, (th) => th.weight);
+    let cum = 0;
+    for (let i = 0; i < data.length; i += 1) {
+      data[i].dx = cum / totalWeight * sts.width + data[0].weight / totalWeight * sts.width / 2;
+      cum += data[i].weight;
+    }
+
+    this.mainGroup.selectAll('.tgroup')
+      .data(data)
+      .enter()
+      .append('g')
+      .attrs((d) => ({
+        id: `${d.theme}-group`,
+        class: 'tgroup',
+        transform: `translate(${d.dx},${0})`,
+      }));
+
+    _.forEach(data, (th) => {
+      const drawData = _.map(th.words, (d) => ({
+        text: d.name,
+        size: sizeScale(d.freq),
+      }));
+      cloud().size([th.weight / totalWeight * sts.width, sts.height])
+        .words(drawData)
+        .rotate(0)
+        .fontSize((d) => d.size)
+        .on('end', (words) => {
+          this.mainGroup.select(`#${th.theme}-group`)
+            .selectAll('text')
+            .data(words)
+            .enter()
+            .append('text')
+            .style('font-size', (d) => `${d.size}px`)
+            .style('font-weight', '400')
+            .style('font-family', 'Roboto', 'Helvetica', 'Arial', 'sans-serif')
+            .style('fill', (d, i) => d3.schemeCategory10[i % 10])
+            .attr('text-anchor', 'middle')
+            .attr('transform', (d) => `translate(${[d.x, d.y]})rotate(${d.rotate})`)
+            .text((d) => d.text);
+        })
+        .start();
+    });
+
+    this.axisGroup.selectAll('.hline')
+      .append('line')
+      .attrs({
+        class: 'hline',
+        x1: 0,
+        y1: 0,
+        x2: sts.width,
+        y2: 0,
+        stroke: 'black',
+        'stroke-width': 1.5,
+        'marker-end': `url(#${this.id}-arrow)`,
+      });
   }
 
   render() {

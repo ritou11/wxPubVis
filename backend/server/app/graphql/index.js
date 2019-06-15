@@ -111,7 +111,7 @@ const schema = makeExecutableSchema({
           pid: input.pId,
         });
         result = result && result.toObject();
-        return result.themes;
+        return result && result.themes;
       },
       async profileThemes(parent, { input }, context, info) {
         const proj = project(info);

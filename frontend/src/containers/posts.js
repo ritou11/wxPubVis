@@ -36,6 +36,7 @@ const styles = {
   },
   col2: {
     flex: 1,
+    minWidth: '380px',
   },
 };
 
@@ -245,7 +246,6 @@ class Posts extends React.Component {
               <tr>
                 <th>发布时间 {this.sortBy('publishAt')}</th>
                 <th>文章标题</th>
-                <th>位置</th>
                 <th>阅读数 {this.sortBy('readNum')}</th>
                 <th>点赞数 {this.sortBy('likeNum')}</th>
                 <th>公众号</th>
@@ -258,18 +258,19 @@ class Posts extends React.Component {
                   <tr key={i.pId}>
                     <td>{i.publishAt}</td>
                     <td>{i.showTitle}</td>
-                    <td>{i.msgIdx}</td>
                     <td>{i.readNum}</td>
                     <td>{i.likeNum}</td>
                     <td>{i.showProfile}</td>
-                    <td><Link
-                      component="button"
-                      variant="body2"
-                      onClick={() => {
-                        this.setState({
-                          pId: i.pId,
-                        });
-                      }}>详情</Link>
+                    <td>
+                      <Button
+                        onClick={() => {
+                          this.setState({
+                            pId: i.pId,
+                          });
+                        }}
+                        color="primary">
+                        详情
+                      </Button>
                     </td>
                   </tr>
                 ))

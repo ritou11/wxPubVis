@@ -5,10 +5,14 @@ import { withStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { round } from 'lodash';
+import { Query, ApolloProvider } from 'react-apollo';
+import { gql } from 'apollo-boost';
+import { gqlClient } from '../config';
 
 import { fetchPosts, assembleUrl } from '../actions';
 import Loading from '../components/loading';
 import Paginator from '../components/paginator';
+import PostCard from '../components/postCard';
 import Search from './search';
 
 function timeDiff(update, publish) {
@@ -24,11 +28,22 @@ function timeDiff(update, publish) {
 
 const styles = {
   root: {
+    display: 'flex',
+    flex: 1,
+  },
+  col1: {
+    flex: 10,
+  },
+  col2: {
     flex: 1,
   },
 };
 
 class Posts extends React.Component {
+  state = {
+    pId: '5ce1507c4877ed43338112e1',
+  }
+
   componentDidMount() {
     const { dispatch, location } = this.props;
     dispatch(fetchPosts(location.query));
@@ -124,10 +139,10 @@ class Posts extends React.Component {
     const { isFetching, posts, history, location, classes } = this.props;
     const { search, pathname } = location;
     if (isFetching || !posts.data) return <Loading />;
-    const { metadata, data } = posts;
+    const { metadata } = posts;
 
     // show
-    const showData = data.map((i) => {
+    const showData = posts.data.map((i) => {
       let showTitle = (i.title && i.title.substr(0, 25)) || '暂无';
       if (i.link) {
         showTitle = <a title={i.title} href={i.link} rel="noopener noreferrer" target="_blank">{showTitle}</a>;
@@ -157,48 +172,112 @@ class Posts extends React.Component {
 
     return (
       <div className={classes.root}>
-        {this.renderFilter()}
-        <Search
-          location={location}
-          history={history}
-          searchArgs={this.returnCurrentSearchArgs()}
-          defaultText="搜索文章..."
-        />
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>发布时间 {this.sortBy('publishAt')}</th>
-              <th>文章标题</th>
-              <th>位置</th>
-              <th>阅读数 {this.sortBy('readNum')}</th>
-              <th>点赞数 {this.sortBy('likeNum')}</th>
-              <th>更新时间 {this.sortBy('updatedAt')}</th>
-              <th>间隔</th>
-              <th>公众号</th>
-              <th>可视化</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              showData.map((i) => (
-                <tr key={i.pId}>
-                  <td>{i.pId}</td>
-                  <td>{i.publishAt}</td>
-                  <td>{i.showTitle}</td>
-                  <td>{i.msgIdx}</td>
-                  <td>{i.readNum}</td>
-                  <td>{i.likeNum}</td>
-                  <td>{i.updatedAt}</td>
-                  <td>{i.updateInterval}</td>
-                  <td>{i.showProfile}</td>
-                  <td><Link to={`/postvis?pid=${i.pId}`}>详情</Link></td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
-        <Paginator { ...metadata } history={ history } search={ search } pathname={ pathname } ></Paginator>
+        <div className={classes.col2}>
+          <ApolloProvider client={gqlClient}>
+            <Query
+              query={gql`
+                {
+                  post(
+                    input:{
+                      pId:"${this.state.pId}"
+                    }
+                  ) {
+                    title
+                    digest
+                    publishAt
+                    readNum
+                    likeNum
+                    cover
+                    link
+                    sourceUrl
+                    profile {
+                      title
+                      headimg
+                    }
+                    related {
+                      pId
+                      info {
+                        title
+                        readNum
+                        likeNum
+                        senti
+                      }
+                      simi
+                    }
+                  }
+                  postThemes(
+                    input:{
+                      pId:"${this.state.pId}"
+                    }
+                  ) {
+                    theme
+                    words {
+                      name
+                      freq
+                    }
+                    weight
+                  }
+                }
+              `}
+            >
+              {({ loading, error, data }) => {
+                if (loading) return <Loading />;
+                if (error || !data || !data.post) return <p>Error :(</p>;
+                return (
+                  <div>
+                    <PostCard data={data}/>
+                  </div>
+                );
+              }}
+            </Query>
+          </ApolloProvider>
+        </div>
+        <div className={classes.col1}>
+          {this.renderFilter()}
+          <Search
+            location={location}
+            history={history}
+            searchArgs={this.returnCurrentSearchArgs()}
+            defaultText="搜索文章..."
+          />
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th>发布时间 {this.sortBy('publishAt')}</th>
+                <th>文章标题</th>
+                <th>位置</th>
+                <th>阅读数 {this.sortBy('readNum')}</th>
+                <th>点赞数 {this.sortBy('likeNum')}</th>
+                <th>公众号</th>
+                <th>可视化</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                showData.map((i) => (
+                  <tr key={i.pId}>
+                    <td>{i.publishAt}</td>
+                    <td>{i.showTitle}</td>
+                    <td>{i.msgIdx}</td>
+                    <td>{i.readNum}</td>
+                    <td>{i.likeNum}</td>
+                    <td>{i.showProfile}</td>
+                    <td><Link
+                      component="button"
+                      variant="body2"
+                      onClick={() => {
+                        this.setState({
+                          pId: i.pId,
+                        });
+                      }}>详情</Link>
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+          <Paginator { ...metadata } history={ history } search={ search } pathname={ pathname } ></Paginator>
+        </div>
       </div>
     );
   }

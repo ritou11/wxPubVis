@@ -93,12 +93,21 @@ class PostCard extends React.Component {
             阅读量：{post.readNum}，点赞数：{post.likeNum}
           </Typography>
         </CardContent>
-        <CardContent>
-          <VisThemebar data={postThemes} settings={{
-            width: 300,
-            height: 20,
-          }}/>
-        </CardContent>
+        {(() => {
+          if (postThemes) {
+            return (
+              <CardContent>
+                <VisThemebar data={postThemes} settings={{
+                  width: 300,
+                  height: 20,
+                }}/>
+              </CardContent>
+            );
+          }
+          return (
+            <Typography> 暂无主题！</Typography>
+          );
+        })()}
         <CardActions>
           <Button size="small" color="primary" href={data.sourceUrl}>
             Read more

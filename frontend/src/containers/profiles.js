@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { map, filter, sortBy } from 'lodash';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
 import { Query, ApolloProvider } from 'react-apollo';
 import { gql } from 'apollo-boost';
@@ -82,6 +83,30 @@ class Profiles extends React.Component {
       <div className={classes.root}>
         <div className={classes.col2}>
           <ApolloProvider client={gqlClient}>
+            <Query
+              query={gql`
+              {
+                profile(input: {
+                  msgBiz:"${this.state.msgBiz}"
+                }) {
+                  title
+                }
+              }
+            `}
+            >
+              {({ loading, error, data }) => {
+                if (loading) return <Loading />;
+                if (error) return <p>Error :(</p>;
+                return (
+                  <Typography
+                    variant="h6"
+                    color="textPrimary"
+                    align="center">
+                    {data.profile.title}
+                  </Typography>
+                );
+              }}
+            </Query>
             <Query
               query={gql`
               {

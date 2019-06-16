@@ -41,7 +41,7 @@ ReactDOM.render(
     <Provider store={store}>
       <App history={browserHistory}>
         <Router history={browserHistory}>
-          <Route exact path="/" component={Posts} />
+          <Route exact path="/" component={Profiles} />
           <Route path="/posts" component={Posts} />
           <Route path="/profiles" component={Profiles} />
           <Route path="/colorana" component={D3app} />

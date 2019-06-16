@@ -2,12 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
 import { MuiThemeProvider, createMuiTheme, withStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import { Home, Bookmark } from '@material-ui/icons';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.min.css';
@@ -25,7 +23,17 @@ const styles = () => ({
   root: {
     display: 'flex',
     width: '100%',
+    flexDirection: 'column',
+  },
+  appBar: {
+    display: 'flex',
     flexDirection: 'row',
+    alignItems: 'center',
+  },
+  title: {
+    flexGrow: 1,
+    marginRight: '32px',
+    textAlign: 'right',
   },
   drawer: {
     width: 180,
@@ -47,39 +55,49 @@ const styles = () => ({
 });
 
 class App extends React.Component {
+  state = {
+    tabvalue: 0,
+  }
+
+  handleTabChange = (event, tabvalue) => {
+    const { history } = this.props;
+    this.setState({ tabvalue });
+    switch (tabvalue) {
+      case 0:
+        history.push('/posts');
+        break;
+      case 1:
+        history.push('/profiles');
+        break;
+      case 2:
+        history.push('/vis');
+        break;
+      default:
+        history.push('/');
+    }
+  };
+
   render() {
-    const { history, message, dispatch } = this.props;
+    const { message, dispatch } = this.props;
     const { classes } = this.props;
     return (
       <MuiThemeProvider theme={theme}>
         <div className={classes.root}>
-          <Drawer className={classes.drawer}
-            classes={{ paper: classes.drawerPaper }}
-            open={true}
-            variant={'persistent'}>
-            <List>
-              <ListItem button onClick={() => { history.push('/'); }}>
-                <ListItemIcon className={classes.listitemicon}><Home/></ListItemIcon>
-                <ListItemText primary="首页" />
-              </ListItem>
-              <ListItem button onClick={() => { history.push('/posts'); }}>
-                <ListItemIcon className={classes.listitemicon}><Bookmark/></ListItemIcon>
-                <ListItemText primary="推送数据" />
-              </ListItem>
-              <ListItem button onClick={() => { history.push('/profiles'); }}>
-                <ListItemIcon className={classes.listitemicon}><Bookmark/></ListItemIcon>
-                <ListItemText primary="公众号数据" />
-              </ListItem>
-              <ListItem button onClick={() => { history.push('/colorana'); }}>
-                <ListItemIcon className={classes.listitemicon}><Bookmark/></ListItemIcon>
-                <ListItemText primary="D3实例" />
-              </ListItem>
-              <ListItem button onClick={() => { history.push('/vis'); }}>
-                <ListItemIcon className={classes.listitemicon}><Bookmark/></ListItemIcon>
-                <ListItemText primary="公众号可视化" />
-              </ListItem>
-            </List>
-          </Drawer>
+          <div style={{ minHeight: '48px' }}>
+            <AppBar className={classes.appBar}>
+              <Tabs value={this.state.tabvalue}
+                onChange={this.handleTabChange}
+                variant="scrollable"
+                scrollButtons="on">
+                <Tab label="推送" />
+                <Tab label="公众号" />
+                <Tab label="公众号可视化" />
+              </Tabs>
+              <Typography variant="h6" color="inherit" className={classes.title}>
+                微信公众号可视化平台
+              </Typography>
+            </AppBar>
+          </div>
           <div className={classes.wrapper}>
             {this.props.children}
           </div>

@@ -64,13 +64,10 @@ class App extends React.Component {
     this.setState({ tabvalue });
     switch (tabvalue) {
       case 0:
-        history.push('/posts');
-        break;
-      case 1:
         history.push('/profiles');
         break;
-      case 2:
-        history.push('/vis');
+      case 1:
+        history.push('/posts');
         break;
       default:
         history.push('/');
@@ -89,9 +86,8 @@ class App extends React.Component {
                 onChange={this.handleTabChange}
                 variant="scrollable"
                 scrollButtons="on">
-                <Tab label="推送" />
                 <Tab label="公众号" />
-                <Tab label="公众号可视化" />
+                <Tab label="推送" />
               </Tabs>
               <Typography variant="h6" color="inherit" className={classes.title}>
                 微信公众号可视化平台

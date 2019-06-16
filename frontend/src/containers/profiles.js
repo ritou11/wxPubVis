@@ -12,6 +12,7 @@ import { fetchProfiles } from '../actions';
 import Loading from '../components/loading';
 import VisReadnumLine from '../components/visReadnumLine';
 import VisActivityLine from '../components/visActivityLine';
+import VisPerpub from '../components/visPerpub';
 import Paginator from '../components/paginator';
 import Search from './search';
 
@@ -160,6 +161,35 @@ class Profiles extends React.Component {
                     width={800}
                     title={this.state.title}
                     data={nestedData}
+                  />
+                );
+              }}
+            </Query>
+            <Query
+              query={gql`
+              {
+                profileThemes(input: {
+                  msgBiz:"${this.state.msgBiz}"
+                }) {
+                  themes {
+                    importance
+                    name
+                    keywords
+                  }
+                }
+              }
+            `}
+            >
+              {({ loading, error, data }) => {
+                if (loading) return <Loading />;
+                if (error || !data || !data.profileThemes) return <p>Error :(</p>;
+                return (
+                  <VisPerpub
+                    data={data.profileThemes.themes}
+                    settings={{
+                      width: 800,
+                      height: 350,
+                    }}
                   />
                 );
               }}

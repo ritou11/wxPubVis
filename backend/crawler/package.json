@@ -22,7 +22,7 @@
     "json2csv": "^3.11.2",
     "lodash": "^4.17.11",
     "moment": "^2.21.0",
-    "mongoose": "^5.0.10",
+    "mongoose": "^5.7.5",
     "morgan": "^1.8.2",
     "motime": "^0.0.2",
     "redis": "^2.8.0",

@@ -16,6 +16,7 @@
 4. Export json: Keep running and `./export.sh`
 5. Restore: Keep running, put wePubVis.tar.gz in `backup/` and `./restore.sh`
 6. Deploy: Ensure the content in `deploy.sh` and `docker-compose-deploy.yml`, then exec the former
+7. Update cert: A manual method, `rm -r /root/letsencrypt` on remote machine and run `letsencrypt` container; after that run `deploy.sh` again to ensure the configuration.
 
 ## License
 MIT

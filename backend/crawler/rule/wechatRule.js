@@ -387,12 +387,18 @@ const handleProfileHtml = async function (ctx) {
         // 正在加载
         // 已无更多
         // 关注公众帐号，接收更多消息
+        if(contentArr.length < 1) {
+          return { status: 0 };
+        }
         const statusStr = contentArr.pop();
         if (statusStr.indexOf('关注公众帐号，接收更多消息') > -1) {
           return { status: 3 };
         }
 
         // 倒数第二行表示最旧的一篇文章的发布日期
+        if(contentArr.length < 1) {
+          return { status: 0 };
+        }
         let dateStr = contentArr.pop();
         dateStr = dateStr.trim();
         const dateRegexp = /(\\d{4})年(\\d{1,2})月(\\d{1,2})日/;
@@ -416,13 +422,13 @@ const handleProfileHtml = async function (ctx) {
 
       // 控制下拉页面的方法
       const controlScroll = () => {
-        // const res = isScrollFn(${minTime});
+        const res = isScrollFn(${minTime});
 
         // alert('res.status');
         // alert(res.status);
 
-        // const status = res.status;
-        const status = 0;
+        const status = res.status;
+        // const status = 0;
         if (status === 0) {
           window.scrollTo(0, document.body.scrollHeight);
           setTimeout(controlScroll, ${scrollInterval});

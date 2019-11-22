@@ -11,6 +11,7 @@ services:
     ports:
       - 8101:8101
       - 8102:8102
+      - 8104:8104
     volumes:
       - /root/myConfig.json:/app/myConfig.json
       #! absolute path
@@ -24,11 +25,11 @@ services:
     environment:
       - MONGO_HOST=mongo
       #! hardcoded
-      - CORS_ORIGIN=http://192.10.10.230:3000
+      - CORS_ORIGIN=http://192.10.10.108:3000
     expose:
       - "3000"
     ports:
-      - 3000:3000
+      - 80:3000
     depends_on:
       - mongo
     networks:
@@ -39,6 +40,9 @@ services:
       - main
   mongo:
     image: mongo:3.6
+    ports:
+      # !!! development !!!
+      - 27017:27017
     volumes:
       - mongodata:/data/db
     networks:

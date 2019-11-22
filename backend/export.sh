@@ -1,14 +1,18 @@
 #!/bin/bash
 cd backup
-BACKUPPATH=$(pwd)
-# remote: BACKUPPATH='/root/backup'
+# BACKUPPATH=$(pwd)
+BACKUPPATH='/root/backup'
 cd ..
 collections=(
-  posts
-  profiles
-  perpub
+  categories
+  comments
   perdoc
+  perpub
+  posts
+  profilepubrecords
+  profiles
   pubposts
+  sim
 )
 for col in "${collections[@]}"; do
     echo "exporting $col..."

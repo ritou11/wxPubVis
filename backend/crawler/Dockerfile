@@ -9,5 +9,6 @@ RUN cd ~ \
   && mv /app/certificates ~/.anyproxy/ \
   && cp ~/.anyproxy/certificates/rootCA.crt /usr/local/share/ca-certificates/ \
   && update-ca-certificates \
-  && cd /app
+  && cd /app \
+  && yarn
 CMD ["yarn", "start"]

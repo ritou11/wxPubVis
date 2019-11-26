@@ -23,6 +23,8 @@ services:
     image: server:latest
     environment:
       - MONGO_HOST=mongo
+      #! hardcoded
+      - CORS_ORIGIN=http://192.10.10.108:3000
     expose:
       - "3000"
     ports:

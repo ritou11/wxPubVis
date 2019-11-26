@@ -1,0 +1,19 @@
+[[source]]
+name = "tuna"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+pymongo = "*"
+gensim = "*"
+pprint = "*"
+jieba = "*"
+numpy = "*"
+pandas = "*"
+sklearn = "*"
+snownlp = "*"
+
+[requires]
+python_version = "3.6"

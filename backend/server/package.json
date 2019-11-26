@@ -28,7 +28,7 @@
     "graphql-tools": "2.23.1",
     "lodash": "4.17.13",
     "minimist": "1.2.0",
-    "mongoose": "5.0.11",
+    "mongoose": "5.7.5",
     "motime": "^0.0.2",
     "nocache": "2.0.0",
     "ratelimiter": "3.0.3",

@@ -66,21 +66,13 @@ Profile.statics.getNextProfileLink = async function() {
 
   if (targetBiz && targetBiz.length > 0) searchQuery.msgBiz = { $in: targetBiz };
 
-  const links = await this.find(searchQuery).select('msgBiz').then(profiles => {
+  const links = await this.find(searchQuery).sort({ createdAt: -1 }).select('msgBiz').then(profiles => {
     if (!(profiles && profiles.length > 0)) return [];
     let tmpProfiles = profiles.map(profile => {
       const link = `https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=${profile.msgBiz}&scene=124#wechat_redirect`;
       const msgBiz = profile.msgBiz;
       return { link, msgBiz };
     });
-
-    if (targetBiz && targetBiz.length) {
-      // 按照目标 biz 排序
-      tmpProfiles.sort((a, b) => {
-        if (targetBiz.indexOf(a.msgBiz) <= targetBiz.indexOf(b.msgBiz)) return -1;
-        return 1;
-      });
-    }
 
     return tmpProfiles.map(p => p.link);
   });

@@ -15,6 +15,10 @@ for i, doc in enumerate(cursor):
     if (i % 100 == 0):
         print(f'\r{i}', end='', flush=True)
     if 'content' in doc.keys() and 'senti' not in doc.keys():
-        senti = SnowNLP(doc['content']).sentiments
-        cmtcol.update_one({'_id': doc['_id']}, {'$set': {'senti': senti}})
+        try:
+            senti = SnowNLP(doc['content']).sentiments
+        except Exception as e:
+            print(str(e))
+        else:
+            cmtcol.update_one({'_id': doc['_id']}, {'$set': {'senti': senti}})
 cursor.close()

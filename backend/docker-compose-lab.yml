@@ -1,22 +1,5 @@
 version: '3'
 services:
-  letsencrypt:
-    image: linuxserver/letsencrypt
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - /root/letsencrypt:/config
-      # absolute path
-    environment:
-      - EMAIL=ritou11@gmail.com
-      - URL=wxpub-api.nogeek.top
-      - VALIDATION=http
-      - TZ=Europe/Stockholm
-      - PUID=1000
-      - PGID=1000
-    networks:
-      - main
   crawler:
     image: registry.cn-hangzhou.aliyuncs.com/wxpubvis/crawler:latest
     environment:
@@ -28,9 +11,10 @@ services:
     ports:
       - 8101:8101
       - 8102:8102
+      - 8104:8104
     volumes:
       - /root/myConfig.json:/app/myConfig.json
-      # absolute path
+      #! absolute path
     depends_on:
       - redis
       - mongo
@@ -40,9 +24,12 @@ services:
     image: registry.cn-hangzhou.aliyuncs.com/wxpubvis/server:latest
     environment:
       - MONGO_HOST=mongo
-      - CORS_ORIGIN=https://wxpub.nogeek.top
+      #! hardcoded
+      - CORS_ORIGIN=http://192.10.10.108:3000
     expose:
       - "3000"
+    ports:
+      - 80:3000
     depends_on:
       - mongo
     networks:
@@ -53,6 +40,9 @@ services:
       - main
   mongo:
     image: mongo:3.6
+    ports:
+      # !!! development !!!
+      - 27017:27017
     volumes:
       - mongodata:/data/db
     networks:

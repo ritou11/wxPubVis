@@ -422,12 +422,13 @@ const handleProfileHtml = async function (ctx) {
 
       // 控制下拉页面的方法
       const controlScroll = () => {
-        const res = isScrollFn(${minTime});
+        // const res = isScrollFn(${minTime});
 
         // alert('res.status');
         // alert(res.status);
 
-        const status = res.status;
+        // const status = res.status;
+        const status = 0;
         if (status === 0) {
           window.scrollTo(0, document.body.scrollHeight);
           setTimeout(controlScroll, ${scrollInterval});

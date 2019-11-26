@@ -1,7 +1,8 @@
 #!/bin/bash
 cd backup
-BACKUPPATH=$(pwd)
-# remote: BACKUPPATH='/root/backup'
+# BACKUPPATH=$(pwd)
+# remote: 
+BACKUPPATH='/root/backup'
 cd ..
 docker run --rm --network="backend_main" -v $BACKUPPATH:/backup mongo:3.6 \
 bash -c 'mongodump --gzip --archive=/backup/wxpubvis.tar.gz --host mongo:27017'

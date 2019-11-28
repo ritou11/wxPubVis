@@ -274,11 +274,15 @@ const getProfileBasicInfo = async function (ctx) {
   const msgBiz = urlObj.query.__biz;
   const title = getTarget(/var nickname = "(.+?)"/);
   const headimg = getTarget(/var headimg = "(.+?)"/);
+  const oper = { openHistoryPageAt: new Date() };
+  debug(title, headimg);
+  if (title) oper.title = title;
+  if (headimg) oper.headimg = headimg;
 
   // 更新微信号基础信息
   await models.Profile.findOneAndUpdate(
     { msgBiz },
-    { title, headimg, openHistoryPageAt: new Date() },
+    oper,
     { upsert: true }
   );
 

@@ -1,5 +1,6 @@
 'use strict';
 
+const _ = require('lodash');
 const url = require('url');
 const moment = require('moment');
 const models = require('../models');
@@ -316,7 +317,11 @@ const getPostList = async function (ctx) {
   try {
     const data = JSON.parse(body);
     const postList = JSON.parse(data.general_msg_list).list;
-    await savePostsData(postList);
+    const jump = await savePostsData(postList);
+    debug('jump:', jump);
+    data.next_offset +=_.max([0, jump - 10]);
+    res.response.body = Buffer.from(JSON.stringify(data))
+    return res;
   } catch (e) {
     throw e;
   }
@@ -466,6 +471,7 @@ const handleProfileHtml = async function (ctx) {
 };
 
 // 存文章基本信息至数据库
+// return jumpValue
 async function savePostsData(postList) {
   const posts = [];
   postList.forEach(post => {
@@ -497,15 +503,30 @@ async function savePostsData(postList) {
     const [cover, digest, sourceUrl] = [appMsg.cover, appMsg.digest, appMsg.source_url];
 
     return models.Post.findOneAndUpdate(
-      { msgBiz, msgMid, msgIdx },
-      { title, link, publishAt, cover, digest, sourceUrl },
-      { new: true, upsert: true }
-    );
+        { msgBiz, msgMid, msgIdx },
+        { title, link, publishAt, cover, digest, sourceUrl },
+        { new: true, upsert: true }
+      );
   }));
-
   savedPosts = savedPosts.filter(p => p);
 
+  let jump = 0;
   if (savedPosts.length) {
+    // 估计jump值
+    for (let p of savedPosts) {
+      const { msgBiz, msgMid, msgIdx } = p;
+      p.existed = await models.Post.exists({ msgBiz, msgMid, msgIdx });
+    }
+    const existedPosts = savedPosts.filter(p => p.existed);
+    if (existedPosts.length > 0) {
+      const { msgBiz, msgMid, msgIdx } = _.minBy(existedPosts, p => p.msgMid);
+      jump = models.Post.count({
+        msgBiz,
+        msgMid: { $lte: msgMid },
+        msgIdx: 1,
+      });
+    }
+    // TODO 使用更新时间约束，来更准确地估计jump。
     await models.Profile.logInfo(savedPosts[0].msgBiz);
   }
 
@@ -522,6 +543,8 @@ async function savePostsData(postList) {
     debug('剩余公众号抓取长度:', len);
     debug();
   });
+
+  return jump;
 }
 
 function isPostPage(ctx) {

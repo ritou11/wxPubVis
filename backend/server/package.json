@@ -27,7 +27,7 @@
     "graphql-advanced-projection": "1.0.1",
     "graphql-tools": "2.23.1",
     "lodash": "4.17.13",
-    "minimist": "1.2.0",
+    "minimist": "1.2.2",
     "mongoose": "5.7.5",
     "motime": "^0.0.2",
     "nocache": "2.0.0",

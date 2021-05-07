@@ -25,7 +25,7 @@
     "mongoose": "^5.7.5",
     "morgan": "^1.8.2",
     "motime": "^0.0.2",
-    "redis": "^2.8.0",
+    "redis": "^3.1.1",
     "request": "^2.83.0",
     "request-promise": "^4.2.2"
   },

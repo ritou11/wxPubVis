@@ -21,7 +21,7 @@
     "highcharts-react-official": "^2.1.3",
     "history": "^4.9.0",
     "lodash": "^4.17.21",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.6",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "qhistory": "^1.0.3",

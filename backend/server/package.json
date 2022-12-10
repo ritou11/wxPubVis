@@ -22,7 +22,7 @@
     "chalk": "2.3.2",
     "cors": "2.8.4",
     "cross-env": "5.1.4",
-    "express": "4.16.3",
+    "express": "4.17.3",
     "graphql": "0.13.2",
     "graphql-advanced-projection": "1.0.1",
     "graphql-tools": "2.23.1",
